@@ -6,7 +6,7 @@ maxTurns: 10
 tools: Read Glob Grep Bash(git *)
 ---
 
-You are a sample agent for the nxt-dev plugin.
+You are a sample agent for the nxtdev plugin.
 
 ## Role
 

@@ -1,11 +1,11 @@
-# nxt-dev
+# nxtdev
 
-A Claude Code plugin for NxtCloud development workflows.
+A Claude Code plugin for NxtCloud AI agent development workflows.
 
 ## Installation
 
 ```bash
-claude plugin install nxtcloud-org/nxt-dev-plugin
+claude plugin install nxtcloud-org/nxtdev-plugin
 ```
 
 For local development:
@@ -34,7 +34,7 @@ User-invocable slash commands. Each skill is a directory under `skills/` contain
 
 ```bash
 # Invoke a skill
-/nxt-dev:skill-name
+/nxtdev:skill-name
 ```
 
 #### Skill Directory Structure
@@ -127,7 +127,7 @@ claude --debug
 2. Add frontmatter (`name`, `description`, etc.)
 3. Write instructions in markdown body
 4. Optionally add supporting files (`reference.md`, `scripts/`)
-5. Test with `claude --plugin-dir .` then invoke `/nxt-dev:my-skill`
+5. Test with `claude --plugin-dir .` then invoke `/nxtdev:my-skill`
 
 ### Adding an Agent
 
@@ -141,14 +141,14 @@ MIT
 
 ---
 
-# nxt-dev (한국어)
+# nxtdev (한국어)
 
-NxtCloud 개발 워크플로우를 위한 Claude Code 플러그인입니다.
+NxtCloud AI 에이전트 개발 워크플로우를 위한 Claude Code 플러그인입니다.
 
 ## 설치
 
 ```bash
-claude plugin install nxtcloud-org/nxt-dev-plugin
+claude plugin install nxtcloud-org/nxtdev-plugin
 ```
 
 로컬 개발 시:
@@ -177,7 +177,7 @@ nxt-dev-claude-plugin/
 
 ```bash
 # 스킬 호출
-/nxt-dev:skill-name
+/nxtdev:skill-name
 ```
 
 #### 스킬 디렉토리 구조
@@ -270,7 +270,7 @@ claude --debug
 2. 프론트매터 작성 (`name`, `description` 등)
 3. 마크다운 본문에 지침 작성
 4. 필요 시 보조 파일 추가 (`reference.md`, `scripts/`)
-5. `claude --plugin-dir .`로 테스트 후 `/nxt-dev:my-skill`로 호출
+5. `claude --plugin-dir .`로 테스트 후 `/nxtdev:my-skill`로 호출
 
 ### 에이전트 추가
 

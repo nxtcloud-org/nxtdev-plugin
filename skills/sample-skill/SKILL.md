@@ -8,7 +8,7 @@ argument-hint: "[query]"
 
 # Sample Skill
 
-This is a sample skill for the nxt-dev plugin.
+This is a sample skill for the nxtdev plugin.
 
 ## Current Context
 

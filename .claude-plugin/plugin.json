@@ -1,11 +1,11 @@
 {
-    "name": "nxt-dev",
+    "name": "nxtdev",
     "version": "0.1.0",
-    "description": "NxtCloud Development Plugin",
+    "description": "NxtCloud Development Plugin for AI Agents",
     "author": {
         "name": "NxtCloud",
         "url": "https://github.com/nxtcloud-org"
     },
-    "homepage": "https://github.com/nxtcloud-org/nxt-dev-plugin",
-    "repository": "https://github.com/nxtcloud-org/nxt-dev-plugin"
+    "homepage": "https://github.com/nxtcloud-org/nxtdev-plugin",
+    "repository": "https://github.com/nxtcloud-org/nxtdev-plugin"
 }

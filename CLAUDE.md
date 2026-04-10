@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-**nxt-dev** is a Claude Code plugin for NxtCloud development workflows. No build step, dependencies, or test suite — development consists of adding/editing markdown and JSON files.
+**nxtdev** is a Claude Code plugin for NxtCloud AI agent development workflows. No build step, dependencies, or test suite — development consists of adding/editing markdown and JSON files.
 
 ## Plugin Structure
 
