@@ -11,13 +11,13 @@ claude plugin install nxtcloud-org/nxtdev-plugin
 For local development:
 
 ```bash
-claude --plugin-dir /path/to/nxt-dev-claude-plugin
+claude --plugin-dir /path/to/nxtdev-plugin
 ```
 
 ## Plugin Structure
 
 ```
-nxt-dev-claude-plugin/
+nxtdev-plugin/
 ├── .claude-plugin/
 │   └── plugin.json       # Plugin manifest
 ├── agents/               # Custom subagent definitions
@@ -154,13 +154,13 @@ claude plugin install nxtcloud-org/nxtdev-plugin
 로컬 개발 시:
 
 ```bash
-claude --plugin-dir /path/to/nxt-dev-claude-plugin
+claude --plugin-dir /path/to/nxtdev-plugin
 ```
 
 ## 플러그인 구조
 
 ```
-nxt-dev-claude-plugin/
+nxtdev-plugin/
 ├── .claude-plugin/
 │   └── plugin.json       # 플러그인 매니페스트
 ├── agents/               # 커스텀 서브에이전트 정의

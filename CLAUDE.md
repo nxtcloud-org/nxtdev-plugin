@@ -9,7 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Plugin Structure
 
 ```
-nxt-dev-claude-plugin/
+nxtdev-plugin/
 ├── .claude-plugin/
 │   └── plugin.json          # Plugin manifest (ONLY this file goes here)
 ├── agents/                  # Custom subagent definitions (.md files)
