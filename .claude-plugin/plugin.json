@@ -1,0 +1,11 @@
+{
+    "name": "nxt-dev",
+    "version": "0.1.0",
+    "description": "NxtCloud Development Plugin",
+    "author": {
+        "name": "NxtCloud",
+        "url": "https://github.com/nxtcloud-org"
+    },
+    "homepage": "https://github.com/nxtcloud-org/nxt-dev-plugin",
+    "repository": "https://github.com/nxtcloud-org/nxt-dev-plugin"
+}
