@@ -14,10 +14,11 @@ A plan document must be executable by a worker with zero codebase context, witho
 
 ## Hard Gates
 
-1. **Every step must be executable.** Placeholders (TBD, TODO, "implement later") are never allowed.
-2. **Task conflicts must be prevented.** Tasks modifying the same file must not run in parallel. Tasks with dependencies must wait for predecessor completion.
-3. **Self-Review is mandatory.** After writing the plan, verify its completeness yourself.
-4. **Tasks decompose to minimal feature units.** One task produces one clear deliverable.
+1. **Context Brief 없으면 먼저 물어본다.** Context Brief 파일이 없고 사용자 요청에 goal, scope boundary, success criteria 중 하나라도 빠져 있으면, **코드 탐색이나 계획 작성 전에 반드시 `AskUserQuestion`으로 선택지를 제시**한다. 탐색부터 시작하지 않는다.
+2. **Every step must be executable.** Placeholders (TBD, TODO, "implement later") are never allowed.
+3. **Task conflicts must be prevented.** Tasks modifying the same file must not run in parallel. Tasks with dependencies must wait for predecessor completion.
+4. **Self-Review is mandatory.** After writing the plan, verify its completeness yourself.
+5. **Tasks decompose to minimal feature units.** One task produces one clear deliverable.
 
 ## When To Use
 
@@ -43,11 +44,11 @@ This skill takes a **Context Brief file** as input. If `$ARGUMENTS` is provided,
 ```
 Context Brief가 없습니다. 어떻게 진행할까요?
 
-1. `/nxtdev:clarify`로 요구사항을 구체화한 뒤 다시 plan을 실행
-2. 지금 바로 필수 정보만 확인하고 plan 작성 진행
+1. `/nxtdev:clarify` 먼저 (추천) — 요구사항을 구체화한 뒤 다시 plan을 실행
+2. 바로 plan 작성 — 필수 정보만 빠르게 확인하고 plan 작성 진행
 ```
 
-Option 1 선택 시: 스킬을 종료하고 `/nxtdev:clarify` 실행을 안내합니다.
+Option 1 선택 시 (기본 추천): 스킬을 종료하고 `/nxtdev:clarify` 실행을 안내합니다. clarify가 코드베이스 탐색 + 반복 Q&A로 스코프를 확정하므로 계획 품질이 높아집니다.
 Option 2 선택 시: goal, scope boundary (in/out), success criteria를 `AskUserQuestion`으로 하나씩 확인한 뒤 진행합니다. 이 경우에도 Technical Context는 `Agent` with `subagent_type: "Explore"`로 코드베이스를 탐색하여 보충합니다.
 
 **절대로 사용자 확인 없이 스코프를 자체 결정하지 마십시오.**
