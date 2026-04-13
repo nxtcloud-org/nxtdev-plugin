@@ -54,6 +54,7 @@ React는 베이스로 **항상 자동 포함**된다. 사용자가 별도로 선
 │   또는
 │   └── vite/        ← frontend/vite/rules/*.md (vite 선택 시)
 └── references/      ← frontend/react/reference/*.md (항상 포함)
+                     ← design.md (항상 포함)
 ```
 
 - rules는 프레임워크별 하위 디렉토리로 분리 (겹치는 파일명 공존)
@@ -70,10 +71,11 @@ React는 베이스로 **항상 자동 포함**된다. 사용자가 별도로 선
    - `mkdir -p <project>/.claude/references`
 5. React 규칙 복사: `frontend/react/rules/*.md` → `rules/react/`
 6. React 참조 복사: `frontend/react/reference/*.md` → `references/`
-7. 프레임워크 규칙 복사: `frontend/<framework>/rules/*.md` → `rules/<framework>/`
-8. `init.md`, `README.md` 파일은 복사하지 않는다
-9. 빈 파일은 복사하지 않는다
-10. 결과 출력
+7. 디자인 시스템 복사: `design.md` → `references/design.md`
+8. 프레임워크 규칙 복사: `frontend/<framework>/rules/*.md` → `rules/<framework>/`
+9. `init.md`, `README.md` 파일은 복사하지 않는다
+10. 빈 파일은 복사하지 않는다
+11. 결과 출력
 
 ## 5. 출력 형식
 
