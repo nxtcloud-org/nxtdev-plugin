@@ -190,14 +190,9 @@ See [independent-review.md](references/independent-review.md) for what each revi
 
 ## Execution Handoff
 
-After saving the plan, offer execution choice:
+After saving the plan:
 
-**"Plan complete and saved to `docs/plans/<filename>.md`."**
-
-**"How would you like to proceed?"**
-
-1. **Subagent execution (recommended)** — dispatch a fresh `plan-worker` agent per task via the `Agent` tool, validate with `plan-validator` between tasks
-2. **Inline execution** — execute tasks in this session using `/nxtdev:run-plan`
+**"Plan complete and saved to `docs/plans/<filename>.md`. `/nxtdev:run-plan`으로 실행하시겠습니까?"**
 
 ## Anti-Patterns
 
