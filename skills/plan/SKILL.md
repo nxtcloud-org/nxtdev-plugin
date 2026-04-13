@@ -155,7 +155,7 @@ Every step must contain the actual content a worker needs. These are **plan fail
 - Steps that describe what to do without showing how (code blocks required for code steps)
 - References to types, functions, or methods not defined in any task
 
-## Self-Review (Parallel Reviewers)
+## Independent Review (5 Parallel Reviewers)
 
 After writing the complete plan, dispatch **5 reviewer agents in parallel** — one `Agent` call per reviewer, all in a single message. Each reviewer independently judges one dimension of plan quality.
 
@@ -177,9 +177,9 @@ Each reviewer's prompt must include the full plan file path so it can read the p
 2. Fix every issue found — add missing tasks, replace placeholders, correct names, fix dependency chains, add verification
 3. If any reviewer reported FAIL, the plan is not ready. Fix and re-check (or re-dispatch only the failed reviewers)
 
-**Do NOT skip the parallel review.** Inline self-review by the plan author suffers from confirmation bias — the same context that wrote the plan will overlook its own gaps. Independent reviewers in isolated contexts catch what the author cannot.
+**Do NOT skip the parallel review.** Inline review by the plan author suffers from confirmation bias. Independent reviewers in isolated contexts catch what the author cannot.
 
-See [self-review-checklist.md](references/self-review-checklist.md) for what each reviewer checks in detail.
+See [independent-review.md](references/independent-review.md) for what each reviewer checks in detail.
 
 ## Remember
 

@@ -1,6 +1,6 @@
-# Self-Review: 5 Parallel Reviewers
+# Independent Review: 5 Parallel Reviewers
 
-Plan self-review is performed by 5 independent reviewer agents dispatched in parallel. Each reviewer checks one dimension of plan quality from an isolated context.
+Plan review is performed by 5 independent reviewer agents dispatched in parallel. Each reviewer checks one dimension of plan quality from an isolated context.
 
 ## Why Parallel Reviewers
 
