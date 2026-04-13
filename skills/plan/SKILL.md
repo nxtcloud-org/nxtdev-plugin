@@ -33,7 +33,24 @@ A plan document must be executable by a worker with zero codebase context, witho
 
 ## Input
 
-This skill takes a **Context Brief file** as input. If `$ARGUMENTS` is provided, read it as the Context Brief path. Otherwise, ask the user for the path or confirm essential information (goal, work scope, tech stack) directly.
+This skill takes a **Context Brief file** as input. If `$ARGUMENTS` is provided, read it as the Context Brief path.
+
+**If no Context Brief is provided**, check whether the user's request contains all three: explicit goal, scope boundary (in/out), and success criteria.
+
+- **All three present** → proceed directly
+- **Any missing** → use `AskUserQuestion` to present the choice:
+
+```
+Context Brief가 없습니다. 어떻게 진행할까요?
+
+1. `/nxtdev:clarify`로 요구사항을 구체화한 뒤 다시 plan을 실행
+2. 지금 바로 필수 정보만 확인하고 plan 작성 진행
+```
+
+Option 1 선택 시: 스킬을 종료하고 `/nxtdev:clarify` 실행을 안내합니다.
+Option 2 선택 시: goal, scope boundary (in/out), success criteria를 `AskUserQuestion`으로 하나씩 확인한 뒤 진행합니다. 이 경우에도 Technical Context는 `Agent` with `subagent_type: "Explore"`로 코드베이스를 탐색하여 보충합니다.
+
+**절대로 사용자 확인 없이 스코프를 자체 결정하지 마십시오.**
 
 | Context Brief Field | Plan Header Mapping |
 |---|---|
