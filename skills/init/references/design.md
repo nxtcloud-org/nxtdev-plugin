@@ -2,18 +2,41 @@
 
 ---
 
-## 1. Color Palette & Roles
+## 1. Visual Theme & Atmosphere
+
+NxtCloud's interface opens on a crisp white canvas (`#ffffff`) where a single confident blue (`#2E83F2`) anchors all interactive moments — CTAs, focus rings, and links. The logo tells the full brand story: a gradient sweeping from blue (`#2E83F2`) to magenta (`#F24BE7`), bold and kinetic. But the UI system distills that energy into one color. Where most cloud platforms dissolve into generic blues, NxtCloud's blue is deliberate and saturated — a direct signal of technical clarity. The white-dominant surface keeps everything purposeful; the blue earns its presence precisely because it appears so selectively.
+
+The typography is built on Pretendard Variable, a geometric sans-serif designed for Korean and Latin harmony. This choice reflects NxtCloud's identity as a Korean-first platform without compromising international legibility. At display sizes (32px+), tight negative letter-spacing (-0.32px to -1.8px) creates compressed, authoritative headlines — an engineering confidence expressed through type. The monospace companion, Geist Mono, anchors code, terminal output, and technical labels with quiet precision.
+
+What distinguishes NxtCloud's system is its two-register color strategy. The logo gradient (blue → magenta) lives in brand moments — hero sections, marketing surfaces, the logomark itself. The UI chrome steps back into blue-only discipline: one interactive color, Zinc neutrals, no decorative gradients in components. Depth comes from surface color contrast and a precise five-level shadow scale. The result is a design language that feels alive in brand moments and razor-focused in product.
+
+**Key Characteristics:**
+- Crisp white canvas (`#ffffff`) — blue earns visibility through restraint everywhere else
+- Single UI color `#2E83F2` — exclusive to interactive elements (CTAs, focus rings, links); never decorative in components
+- Logo gradient `#2E83F2` → `#F24BE7` — reserved for logomark, hero sections, and marketing surfaces only
+- Pretendard Variable — Korean-first geometric sans-serif with tight negative tracking at display sizes (32px+)
+- Cool-leaning Zinc neutral scale (slight blue-violet tint) — naturally complements the blue primary
+- No gradients in UI components — gradient lives only in logo and hero decoration
+- Semi-transparent `rgba` borders throughout — integrates naturally on any background color
+- Five-level shadow scale from border-only (Level 0) to full overlay (Level 5)
+
+---
+
+## 2. Color Palette & Roles
 
 ### Brand Colors
 
 | Token | Value | Role |
 |-------|-------|------|
-| `--color-brand-primary` | `#6366f1` *(placeholder)* | CTA, focus, interactive |
-| `--color-brand-primary-hover` | `#4f46e5` | Hover / pressed |
-| `--color-brand-primary-muted` | `rgba(99, 102, 241, 0.12)` | Focus ring, tint background |
+| `--color-brand-primary` | `#2E83F2` | CTA, focus, interactive |
+| `--color-brand-primary-hover` | `#1B6BD8` | Hover / pressed |
+| `--color-brand-primary-muted` | `rgba(46, 131, 242, 0.12)` | Focus ring, tint background |
 | `--color-brand-on-primary` | `#ffffff` | Text on brand background |
+| `--color-brand-gradient-from` | `#2E83F2` | Logo & hero gradient start (decoration only) |
+| `--color-brand-gradient-to` | `#F24BE7` | Logo & hero gradient end (decoration only) |
 
-> Replace brand color at implementation time. Keep the structure: hover = 10–15% darker, muted = 12% opacity.
+> ⚠️ `#2E83F2` white text contrast ratio ~3.7:1. Acceptable for buttons at 14px bold or larger. Avoid on small labels or body text.
+> Gradient tokens (`--color-brand-gradient-*`) are strictly for logomark, hero sections, and marketing surfaces. Never apply gradients to interactive UI components.
 
 ### Neutral Scale (Zinc)
 
@@ -44,7 +67,7 @@ Slight blue-violet tint — neither warm nor cool.
 | `--color-surface-muted` | `#f4f4f5` | Section background, Flat card |
 | `--color-surface-inset` | `#f0f0f1` | Inset container |
 
-> The contrast between `surface-muted` → `surface-default` creates elevation without shadows (Notion approach).
+> The contrast between `surface-muted` → `surface-default` creates elevation without shadows.
 
 ### Text
 
@@ -65,7 +88,7 @@ Slight blue-violet tint — neither warm nor cool.
 | `--color-border-strong` | `rgba(0, 0, 0, 0.15)` | Input borders, emphasis |
 | `--color-border-focus` | `var(--color-brand-primary)` | Focus state |
 
-> Semi-transparent rgba instead of fixed hex — integrates naturally regardless of background color (Linear, Notion, Apple).
+> Semi-transparent rgba instead of fixed hex — integrates naturally regardless of background color.
 
 ### Semantic
 
@@ -77,11 +100,13 @@ Slight blue-violet tint — neither warm nor cool.
 | `--color-info` | `#2563eb` | `#eff6ff` |
 
 ### Gradient System
-None — depth is expressed through shadows and surface color contrast only.
+
+UI components: none — depth is expressed through shadows and surface color contrast only.
+Logo & hero decoration: `linear-gradient(to right, var(--color-brand-gradient-from), var(--color-brand-gradient-to))`
 
 ---
 
-## 2. Typography Rules
+## 3. Typography Rules
 
 ### Font Family
 
@@ -108,14 +133,14 @@ None — depth is expressed through shadows and surface color contrast only.
 | Code | 14px | 400 | 1.6 | 0 (mono) |
 
 ### Principles
-- **Negative tracking at display sizes (32px+)** — tight, authoritative headlines (Linear, Stripe, Claude)
+- **Negative tracking at display sizes (32px+)** — tight, authoritative headlines
 - **Body weight capped at 600** — never use 700+
 - **Overline** — section labels and category markers only. Always uppercase + letter-spacing +0.08em
 - **Korean minimum size** — never below 12px
 
 ---
 
-## 3. Component Stylings
+## 4. Component Stylings
 
 ### Buttons
 
@@ -123,8 +148,8 @@ None — depth is expressed through shadows and surface color contrast only.
 
 | Shape | Radius | Usage |
 |-------|--------|-------|
-| Rounded | 12px (`--radius-md`) | Default UI buttons — Claude, Cursor |
-| Pill | 9999px (`--radius-full`) | Marketing CTAs, tag-style buttons — Spotify, Warp, ElevenLabs |
+| Rounded | 12px (`--radius-md`) | Default UI buttons |
+| Pill | 9999px (`--radius-full`) | Marketing CTAs, tag-style buttons |
 
 **Sizes**
 
@@ -149,7 +174,7 @@ None — depth is expressed through shadows and surface color contrast only.
 
 ### Cards
 
-- `border-radius: 20px` — ElevenLabs, Cohere
+- `border-radius: 20px`
 - Internal padding: `24px`
 
 | Variant | Treatment | Usage |
@@ -167,15 +192,15 @@ None — depth is expressed through shadows and surface color contrast only.
 
 ### Form Inputs
 
-- `height: 40px; border-radius: 10px` — Cohere, Apple, Claude
+- `height: 40px; border-radius: 10px`
 - `border: 1px solid rgba(0,0,0,0.15)`
 - Focus: `border-color: brand-primary; box-shadow: 0 0 0 3px brand-primary-muted`
 - Error: `border-color: #dc2626; box-shadow: 0 0 0 3px rgba(220,38,38,0.12)`
-- Search: `border-radius: 9999px` (pill) — Spotify, Apple
+- Search: `border-radius: 9999px` (pill)
 
 ---
 
-## 4. Layout Principles
+## 5. Layout Principles
 
 ### Spacing Scale (8px base)
 
@@ -208,19 +233,19 @@ None — depth is expressed through shadows and surface color contrast only.
 
 ### Container & Grid
 
-- **Max width**: 1200px (centered) — Linear, Notion
+- **Max width**: 1200px (centered)
 - **Gutter**: 80px (desktop) / 40px (tablet) / 20px (mobile)
 - **Columns**: 12-column base; feature sections use 2–3 columns
 
 ### Whitespace Philosophy
 
-- Section vertical spacing: 64–96px (Notion, Linear, Stripe)
-- Breathing room over content density — Apple, Linear
+- Section vertical spacing: 64–96px
+- Breathing room over content density
 - `surface-muted` sections act as natural visual separators without dividers
 
 ---
 
-## 5. Depth & Elevation
+## 6. Depth & Elevation
 
 ### Shadow Scale
 
@@ -235,38 +260,39 @@ None — depth is expressed through shadows and surface color contrast only.
 
 ### Philosophy
 
-- **Level 0: border-only** — separation through border alone, no shadow. Nested context, Flat cards (Linear, Notion)
-- **Level 1–2: layered subtle shadows** — opacity 0.04–0.06, 2-layer stack for natural lift (Apple, Expo)
-- **Level 3–5: ring + deep shadow** — 1px ring defines the edge, blur creates lift. Overlay components only (Claude, Apple)
+- **Level 0: border-only** — separation through border alone, no shadow. Nested context, Flat cards
+- **Level 1–2: layered subtle shadows** — opacity 0.04–0.06, 2-layer stack for natural lift
+- **Level 3–5: ring + deep shadow** — 1px ring defines the edge, blur creates lift. Overlay components only
 
 ---
 
-## 6. Do's and Don'ts
+## 7. Do's and Don'ts
 
 ### Do
-- Use semi-transparent `rgba(0,0,0,0.08)` for card borders — integrates naturally on any background (Linear, Notion)
-- Apply negative letter-spacing at all display sizes (32px+) — minimum `-0.32px` (Linear, Notion, Stripe, Figma)
-- Reserve brand color exclusively for interactive elements — CTAs, focus rings, links only (Apple, Linear, Stripe, Spotify)
-- Default buttons use Rounded (12px); Pill only for marketing CTAs and tags (Claude, Cursor vs Spotify, Warp)
-- Apply focus ring consistently: `2px solid brand-primary, outline-offset: 2px` (Apple, ElevenLabs)
-- Use `surface-muted` (#f4f4f5) for section backgrounds — expresses hierarchy without shadows (Notion, Expo)
-- Always apply uppercase + letter-spacing +0.08em to Overline labels (Linear, Figma, Warp)
-- Keep all shadows neutral black — no brand-tinted or warm-tinted shadow colors (Linear, Notion, Stripe)
-- Use Level 3+ shadow with 1px ring for floating elements (dropdowns, modals) (Claude, Apple)
+- Use semi-transparent `rgba(0,0,0,0.08)` for card borders — integrates naturally on any background
+- Apply negative letter-spacing at all display sizes (32px+) — minimum `-0.32px`
+- Reserve brand color exclusively for interactive elements — CTAs, focus rings, links only
+- Default buttons use Rounded (12px); Pill only for marketing CTAs and tags
+- Apply focus ring consistently: `2px solid brand-primary, outline-offset: 2px`
+- Use `surface-muted` (#f4f4f5) for section backgrounds — expresses hierarchy without shadows
+- Always apply uppercase + letter-spacing +0.08em to Overline labels
+- Keep all shadows neutral black — no brand-tinted or warm-tinted shadow colors
+- Use Level 3+ shadow with 1px ring for floating elements (dropdowns, modals)
 
 ### Don't
-- Never use font weight 700+ — 600 (Semibold) is the maximum (Linear, Claude, ElevenLabs)
+- Never use font weight 700+ — 600 (Semibold) is the maximum
 - Never hardcode brand colors — always use tokens (`var(--color-brand-primary)`)
-- Never use `border-radius` below 20px on cards — minimum is `--radius-lg` (ElevenLabs, Cohere, Apple)
+- Never use `border-radius` below 20px on cards — minimum is `--radius-lg`
 - Never create shadows beyond Level 5 — stay within the defined token range
 - Never use Korean text below 12px
 - Never apply borders stronger than `rgba(0,0,0,0.15)` outside of form inputs
-- Never add gradients or blur (glassmorphism) effects (Linear, Notion, Stripe)
+- Never add gradients to UI components — gradient is reserved for logo and hero decoration only (use `--color-brand-gradient-*` tokens)
+- Never add blur (glassmorphism) effects
 - Never use positive letter-spacing on body text — 0 is the floor; negative only at display sizes
 
 ---
 
-## 7. Responsive Behavior
+## 8. Responsive Behavior
 
 ### Breakpoints
 

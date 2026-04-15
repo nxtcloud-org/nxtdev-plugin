@@ -1,7 +1,7 @@
 ---
 name: init
 description: "프론트엔드 프로젝트 초기 설정. 프레임워크(Next.js/React/Vite)를 감지하거나 선택받아 .claude/rules/에 규칙 파일을 세팅한다."
-argument-hint: "[nextjs|vite|react]"
+argument-hint: "[nextjs|vite|react|design]"
 allowed-tools: "Read Write Glob Bash(ls *) Bash(mkdir *) Bash(cp *) Bash(find *)"
 ---
 
@@ -10,6 +10,8 @@ allowed-tools: "Read Write Glob Bash(ls *) Bash(mkdir *) Bash(cp *) Bash(find *)
 프론트엔드 프로젝트의 `.claude/` 디렉토리에 규칙 파일을 세팅한다.
 
 ## 1. 프레임워크 감지
+
+인자가 `design`이면 프레임워크 감지 없이 바로 디자인 시스템만 복사한다 → **3단계로 건너뜀**.
 
 인자가 주어지면 그대로 사용: `$ARGUMENTS`
 
@@ -27,6 +29,7 @@ package.json에 "react" 있음 → react
 1. **nextjs** — Next.js (App Router) + React + TypeScript
 2. **vite** — Vite + React + TypeScript
 3. **react** — React + TypeScript (프레임워크 없이)
+4. **design** — NxtCloud Design System only
 
 감지 결과를 사용자에게 확인받는다: "Next.js 프로젝트로 감지했습니다. 맞나요?"
 
@@ -62,6 +65,15 @@ React는 베이스로 **항상 자동 포함**된다. 사용자가 별도로 선
 
 ## 4. 실행 절차
 
+### 4a. `/init design` — 디자인 시스템 단독 업데이트
+
+1. `.claude/references/`가 없으면 생성: `mkdir -p <project>/.claude/references`
+2. `design.md`가 이미 존재하면 덮어쓸지 확인
+3. 디자인 시스템 복사: `design.md` → `references/design.md`
+4. 결과 출력
+
+### 4b. `/init [nextjs|vite|react]` — 풀 셋업
+
 1. 프레임워크 감지 또는 인자 확인
 2. 사용자 확인
 3. `.claude/rules/`가 이미 존재하면 덮어쓸지 확인
@@ -79,6 +91,15 @@ React는 베이스로 **항상 자동 포함**된다. 사용자가 별도로 선
 
 ## 5. 출력 형식
 
+`/init design` 실행 시:
+```
+[nxtdev:init] 디자인 시스템 업데이트 완료
+
+.claude/references/
+  └── design.md  ← 업데이트됨
+```
+
+`/init [framework]` 실행 시:
 ```
 [nxtdev:init] {framework} 프로젝트 규칙 세팅 완료
 
