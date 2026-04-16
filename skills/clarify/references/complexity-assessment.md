@@ -21,12 +21,12 @@ Assess task complexity using these 5 signals. Score each signal, then determine 
 
 | Verdict | Route | Rationale |
 |---------|-------|-----------|
-| Simple (5-8) | `/plan` | Task fits in a single plan cycle. Direct planning sufficient. |
-| Complex (9-15) | `/ultraplan` | Task requires multiple plan cycles. Milestone decomposition needed. |
-| Borderline (8-9) | Present both with recommendation | "This scores 9 — borderline complex. I recommend `/ultraplan` because [dominant factor], but `/plan` could work if [condition]. Which do you prefer?" |
+| Simple (5-8) | `/nxtdev:plan` | Task fits in a single plan cycle. Direct planning sufficient. |
+| Complex (9-15) | `/nxtdev:masterplan` | Task requires multiple plan cycles. Milestone decomposition needed. |
+| Borderline (8-9) | Present both with recommendation | "This scores 9 — borderline complex. I recommend `/nxtdev:masterplan` because [dominant factor], but `/nxtdev:plan` could work if [condition]. Which do you prefer?" |
 
 ## Override
 
 The user can always override the routing:
-- "Just plan it" for a complex task → route to `/plan`
-- "Break it into milestones" for a simple task → route to `/ultraplan`
+- "Just plan it" for a complex task → route to `/nxtdev:plan`
+- "Break it into milestones" for a simple task → route to `/nxtdev:masterplan`

@@ -29,7 +29,7 @@ Ambiguity does not resolve in one pass. Multiple rounds of questions and code ex
 
 ## When NOT To Use
 
-- The request is already specific and clear (proceed to `/plan`)
+- The request is already specific and clear (proceed to `/nxtdev:plan`)
 - The scope is obvious, like a simple bug fix or config change
 - The user explicitly says "don't ask questions, just do it"
 
@@ -113,8 +113,8 @@ After the Context Brief is approved, the Complexity Assessment determines the ne
 
 | Verdict | Route | Rationale |
 |---------|-------|-----------|
-| **Simple** (score 5-8) | `/plan` | Task fits in a single plan cycle |
-| **Complex** (score 9-15) | `/ultraplan` | Task requires milestone decomposition |
+| **Simple** (score 5-8) | `/nxtdev:plan` | Task fits in a single plan cycle |
+| **Complex** (score 9-15) | `/nxtdev:masterplan` | Task requires milestone decomposition |
 | **Borderline** (score 8-9) | Present both options with recommendation |
 
 **Override:** The user can always override routing.
