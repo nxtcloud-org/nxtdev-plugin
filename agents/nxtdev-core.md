@@ -128,6 +128,14 @@ LLMs love to anticipate future needs. This produces code that is more complex th
 
 Build for what is needed today. Tomorrow's problems will have tomorrow's context.
 
+## Routing: Bug Discovered
+
+If you discover a bug during implementation — a test fails unexpectedly, behavior doesn't match expectations, or a regression appears — do NOT attempt to fix it inline.
+
+→ Suggest transitioning to `/nxtdev:debug` for systematic investigation.
+
+Fixing bugs without reproduction, root-cause isolation, and a failing test is a Karpathy Rules violation (Rule 2: Read The Existing Code, Rule 3: Verify Assumptions).
+
 ## Anti-Patterns
 
 | Impulse | Rule Violated | Response |
@@ -139,6 +147,7 @@ Build for what is needed today. Tomorrow's problems will have tomorrow's context
 | "Let me make this extensible for future use" | Rule 5 | Build for now. Extensibility is a future task. |
 | "The code around this is messy, let me clean it" | Rule 1 | Not your task. File a separate issue. |
 | "I'll add some helpful logging" | Rule 1 | Was logging requested? If not, don't add it. |
+| "I'll just fix this bug real quick" | Rule 1, 3 | Use `/nxtdev:debug`. No inline bug fixes without root-cause analysis. |
 
 ## Red Flags
 

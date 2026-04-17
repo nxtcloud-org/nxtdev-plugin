@@ -40,7 +40,7 @@ Do NOT keep retrying silently. Report to the user:
 **Current hypothesis:** [best guess at root cause]
 
 **Options:**
-1. Continue debugging — [specific next thing to investigate]
+1. `/nxtdev:debug`로 체계적 디버깅 — [재현 → 근본 원인 격리 → failing test → 수정]
 2. Re-plan specific tasks — [which tasks likely need revision]
 3. Accept partial completion — [what works and what doesn't]
 ```
@@ -53,3 +53,4 @@ Let the user decide. They may have context about the root cause that the agent d
 - **Each attempt must have a different diagnosis.** Retrying the same fix is prohibited.
 - **Targeted fixes only.** Do not rewrite entire tasks. The individual tasks already passed validation — the problem is in how they integrate.
 - **Never skip the E2E gate.** Task-level pass does NOT equal system-level pass. Integration bugs hide between tasks.
+- **Option 1 is the recommended default.** `/nxtdev:debug` provides the structured reproduce → isolate → lock → fix workflow that ad-hoc retries lack.
