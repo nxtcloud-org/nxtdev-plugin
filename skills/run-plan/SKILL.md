@@ -114,7 +114,7 @@ Agent({
 **Validation results:**
 - **Pass:** Mark the task as completed, move to the next task
 - **Fail:** Deliver the validator's feedback to a new worker dispatch for re-implementation. Do not augment the feedback with your own interpretation.
-- **Retry limit:** 3 consecutive failures → escalate to user
+- **Retry limit:** 2 consecutive failures → suggest `/nxtdev:debug` for systematic root-cause investigation. A third retry without understanding the cause is prohibited. If the user declines debug, escalate with full failure context.
 
 ### Parallel Execution Rules
 
@@ -165,6 +165,7 @@ Stop executing immediately and ask the user when:
 | Composing the validator prompt freely | Unconsciously leaks worker context through word choice |
 | Skipping the E2E gate | Task-level pass ≠ system-level pass |
 | Retrying E2E failures >2 times without escalation | Wastes budget; user may have root cause context |
+| Retrying task failures without root-cause analysis | Same fix applied blindly; use `/nxtdev:debug` after 2 failures |
 
 ## Transition
 
@@ -173,5 +174,6 @@ After plan execution is complete:
 - To wrap up → report results to the user and suggest next steps
 - If the plan needs modification → return to `/nxtdev:plan`
 - If ambiguity is discovered → return to `/nxtdev:clarify`
+- If a bug blocks progress or repeated failures occur → suggest `/nxtdev:debug`
 
 This skill **does not invoke the next skill.** It ends by reporting execution results and letting the user choose.
