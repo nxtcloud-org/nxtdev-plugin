@@ -1,8 +1,6 @@
 ---
 name: nxtdev-core
 description: NxtCloud development discipline agent — enforces Karpathy coding guardrails, surgical changes, assumption verification, and scope discipline across all interactions.
-model: sonnet
-tools: Read Write Edit Glob Grep Bash Agent
 ---
 
 # NxtCloud Development Core
