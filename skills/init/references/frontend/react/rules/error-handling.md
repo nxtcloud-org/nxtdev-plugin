@@ -17,6 +17,49 @@ paths:
 - 페이지/기능 단위로 배치
 - fallback에 재시도 버튼 제공
 
+## 이벤트 핸들러 에러
+
+인터셉터가 못 커버하는 영역 — 직접 try/catch 처리.
+
+**폼 제출**
+
+```ts
+const onSubmit = async (data: FormData) => {
+  try {
+    await TaskApi.save(data)
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      form.setError('root', {
+        message: error.response?.data?.message ?? '저장에 실패했습니다'
+      })
+    }
+  }
+}
+```
+
+**일반 액션**
+
+```ts
+const handleDelete = async () => {
+  try {
+    await TaskApi.remove(id)
+    toast.success('삭제되었습니다')
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      toast.error(error.response?.data?.message ?? '삭제에 실패했습니다')
+    }
+  }
+}
+```
+
+**규칙**
+
+- try/catch 필수
+- `error instanceof AxiosError` 타입 가드 필수
+- 폼 에러 → `form.setError('root')`
+- 일반 에러 → `toast.error()`
+- 서버 메시지 우선, 없으면 폴백 메시지
+
 ## 에러 메시지
 
 - 사용자 친화적 메시지만 표시

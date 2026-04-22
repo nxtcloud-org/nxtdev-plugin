@@ -24,4 +24,6 @@ paths:
 - 테스트 작성 시 → `rules/nextjs/testing.md`
 - 폴더 구조/파일 배치 시 → `rules/nextjs/structure.md`
 - 에러 처리 구현 시 → `rules/nextjs/error-handling.md`
+- 비동기 데이터의 로딩/에러/빈 상태 처리 시 → `rules/nextjs/async-states.md`
+- SEO, 메타데이터 설정 시 → `rules/nextjs/seo.md`
 - 파일/변수 이름 지을 때 → `rules/nextjs/naming.md`

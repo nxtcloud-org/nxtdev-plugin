@@ -60,7 +60,8 @@ src/
     ui/                  ← UI 라이브러리 컴포넌트 (shadcn/ui 등)
   features/              ← 도메인별 모듈
     auth/
-      api.ts
+      api.ts             ← API 호출만 (도메인 언어로 메서드 정의)
+      service.ts         ← 순수 비즈니스 로직 (React 의존 없음)
       types.ts
       schemas.ts
       hooks.ts

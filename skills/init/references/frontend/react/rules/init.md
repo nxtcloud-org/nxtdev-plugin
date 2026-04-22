@@ -25,5 +25,7 @@ paths:
 - 테스트 작성 시 → `rules/react/testing.md`
 - 폴더 구조/파일 배치 시 → `rules/react/structure.md`
 - 에러 처리 구현 시 → `rules/react/error-handling.md`
+- 비동기 데이터의 로딩/에러/빈 상태 처리 시 → `rules/react/async-states.md`
+- features/ 안 api.ts/service.ts/hooks.ts 작성 시 → `rules/react/domain.md`
 - 커스텀 훅 작성 시 → `rules/react/hooks.md`
 - 상태 관리 판단 시 → `rules/react/state-management.md`
