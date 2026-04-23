@@ -22,7 +22,7 @@ paths:
 - 성능 최적화 필요 시 → `rules/nextjs/performance.md`
 - 코드 리뷰/셀프 체크 시 → `rules/nextjs/code-quality.md`
 - 테스트 작성 시 → `rules/nextjs/testing.md`
-- 폴더 구조/파일 배치 시 → `rules/nextjs/structure.md`
+- 폴더 구조/파일 배치/프로젝트 scaffolding 시 → `rules/nextjs/structure.md`
 - 에러 처리 구현 시 → `rules/nextjs/error-handling.md`
 - 비동기 데이터의 로딩/에러/빈 상태 처리 시 → `rules/nextjs/async-states.md`
 - SEO, 메타데이터 설정 시 → `rules/nextjs/seo.md`
