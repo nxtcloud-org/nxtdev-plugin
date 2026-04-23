@@ -56,7 +56,7 @@ my-app/
 ## 직접 추가 (프로젝트 생성 후 실행)
 
 ```bash
-# 1. shadcn/ui 초기화 (components.json, src/components/ui/button.tsx, src/lib/utils.ts 자동 생성)
+# 1. shadcn/ui 초기화 (선택) — 컴포넌트 라이브러리로 권장
 npx shadcn@latest init --defaults
 
 # 2. 환경 변수 파일 생성
@@ -108,14 +108,15 @@ src/
       ...
   features/              ← 도메인별 모듈
     auth/
-      api.ts             ← API 함수 (getMeApi, loginApi)
+      api.ts             ← API 호출만 (도메인 언어로 메서드 정의)
+      service.ts         ← 순수 비즈니스 로직 (React 의존 없음)
       types.ts           ← 도메인 전용 타입 (LoginRequest, User)
       schemas.ts         ← Zod 검증 스키마 (loginSchema)
       hooks.ts           ← 도메인 전용 훅 (useAuth)
       actions.ts         ← Server Actions (loginAction)
   hooks/                 ← 전역 공통 훅만
   lib/                   ← 외부 라이브러리 설정/래퍼
-    utils.ts             ← cn() (shadcn/ui 자동 생성)
+    utils.ts             ← cn() 유틸 (shadcn/ui 사용 시 자동 생성, 미사용 시 수동 추가)
   utils/                 ← 순수 유틸리티 함수
   types/                 ← 글로벌 타입 (여러 도메인 공유)
   stores/                ← Zustand 스토어 (클라이언트 전역 상태)
