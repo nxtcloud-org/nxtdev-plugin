@@ -5,7 +5,7 @@ paths:
 
 # 비동기 상태 처리 규칙
 
-Client Component의 상태 처리는 → `rules/react/async-states.md` 참조
+Client Component의 상태 처리는 → `rules/nxtdev-react/async-states.md` 참조
 
 ## Server Component — 파일 기반 처리
 

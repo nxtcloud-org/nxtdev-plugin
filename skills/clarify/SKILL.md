@@ -33,11 +33,11 @@ Ambiguity does not resolve in one pass. Multiple rounds of questions and code ex
 - The scope is obvious, like a simple bug fix or config change
 - The user explicitly says "don't ask questions, just do it"
 
-## Before Starting: Frontend Ruleset Check
+## Before Starting: Ruleset Check
 
-Check whether `.claude/rules/react/` exists.
+Check whether any `.claude/rules/nxtdev-*/` directory exists.
 
-- If missing: ask the user "프론트엔드 룰셋이 세팅되어 있지 않습니다. `/nxtdev:init`을 먼저 실행하시겠습니까?"
+- If missing: ask the user "프로젝트 룰셋이 세팅되어 있지 않습니다. `/nxtdev:init`을 먼저 실행하시겠습니까?"
 - If present: proceed.
 
 ## The Two-Track Process
