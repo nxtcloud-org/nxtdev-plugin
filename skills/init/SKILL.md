@@ -1,6 +1,6 @@
 ---
 name: init
-description: "프론트엔드 프로젝트 초기 설정. 프레임워크(Next.js/React/Vite)를 감지하거나 선택받아 .claude/rules/에 규칙 파일을 세팅한다."
+description: "프론트엔드 프로젝트 초기 설정. 프레임워크(Next.js/React/Vite) 규칙 파일 세팅 또는 NxtCloud 디자인 시스템(`design`) 단독 세팅한다."
 argument-hint: "[nextjs|vite|react|design]"
 allowed-tools: "Read Write Glob Bash(ls *) Bash(mkdir *) Bash(cp *) Bash(find *)"
 ---
@@ -11,7 +11,7 @@ allowed-tools: "Read Write Glob Bash(ls *) Bash(mkdir *) Bash(cp *) Bash(find *)
 
 ## 1. 프레임워크 감지
 
-인자가 `design`이면 프레임워크 감지 없이 바로 디자인 시스템만 복사한다 → **3단계로 건너뜀**.
+인자가 `design`이면 이 섹션을 건너뛰고 **4a로 이동**한다.
 
 인자가 주어지면 그대로 사용: `$ARGUMENTS`
 
@@ -29,11 +29,12 @@ package.json에 "react" 있음 → react
 1. **nextjs** — Next.js (App Router) + React + TypeScript
 2. **vite** — Vite + React + TypeScript
 3. **react** — React + TypeScript (프레임워크 없이)
-4. **design** — NxtCloud Design System only
 
 감지 결과를 사용자에게 확인받는다: "Next.js 프로젝트로 감지했습니다. 맞나요?"
 
 ## 2. 규칙 조합
+
+### framework 경로
 
 React는 베이스로 **항상 자동 포함**된다. 사용자가 별도로 선택할 필요 없다.
 
@@ -43,9 +44,15 @@ React는 베이스로 **항상 자동 포함**된다. 사용자가 별도로 선
 | **vite** | react (자동) + vite |
 | **react** | react만 |
 
+### design 경로
+
+규칙 조합 없음. 디자인 시스템 문서 1개만 배치한다.
+
 ## 3. 파일 배치
 
 소스 경로: `${CLAUDE_SKILL_DIR}/references/`
+
+### framework 경로
 
 대상 프로젝트의 `.claude/`에 프레임워크별 하위 디렉토리로 복사한다:
 
@@ -57,11 +64,20 @@ React는 베이스로 **항상 자동 포함**된다. 사용자가 별도로 선
 │   또는
 │   └── vite/        ← frontend/vite/rules/*.md (vite 선택 시)
 └── references/      ← frontend/react/reference/*.md (항상 포함)
-                     ← design.md (항상 포함)
 ```
 
 - rules는 프레임워크별 하위 디렉토리로 분리 (겹치는 파일명 공존)
 - references는 플랫하게 배치
+
+### design 경로
+
+`design.md` 한 파일만 `.claude/references/`에 배치한다:
+
+```
+<project-root>/.claude/
+└── references/
+    └── design.md    ← design.md (단일 파일)
+```
 
 ## 4. 실행 절차
 
@@ -83,11 +99,10 @@ React는 베이스로 **항상 자동 포함**된다. 사용자가 별도로 선
    - `mkdir -p <project>/.claude/references`
 5. React 규칙 복사: `frontend/react/rules/*.md` → `rules/react/`
 6. React 참조 복사: `frontend/react/reference/*.md` → `references/`
-7. 디자인 시스템 복사: `design.md` → `references/design.md`
-8. 프레임워크 규칙 복사: `frontend/<framework>/rules/*.md` → `rules/<framework>/`
-9. `init.md`, `README.md` 파일은 복사하지 않는다
-10. 빈 파일은 복사하지 않는다
-11. 결과 출력
+7. 프레임워크 규칙 복사: `frontend/<framework>/rules/*.md` → `rules/<framework>/`
+8. `init.md`, `README.md` 파일은 복사하지 않는다
+9. 빈 파일은 복사하지 않는다
+10. 결과 출력
 
 ## 5. 출력 형식
 
