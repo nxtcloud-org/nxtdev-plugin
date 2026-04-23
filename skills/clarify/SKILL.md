@@ -35,10 +35,10 @@ Ambiguity does not resolve in one pass. Multiple rounds of questions and code ex
 
 ## Before Starting: Frontend Ruleset Check
 
-`.claude/rules/react/` 존재 여부를 확인한다.
+Check whether `.claude/rules/react/` exists.
 
-없으면: "프론트엔드 룰셋이 세팅되어 있지 않습니다. `/nxtdev:init`을 먼저 실행하시겠습니까?"
-있으면: 바로 진행
+- If missing: ask the user "프론트엔드 룰셋이 세팅되어 있지 않습니다. `/nxtdev:init`을 먼저 실행하시겠습니까?"
+- If present: proceed.
 
 ## The Two-Track Process
 
