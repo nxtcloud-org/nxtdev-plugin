@@ -46,7 +46,9 @@ React는 베이스로 **항상 자동 포함**된다. 사용자가 별도로 선
 
 ### design 경로
 
-규칙 조합 없음. 디자인 시스템 문서 1개만 배치한다.
+규칙 조합 없음. 디자인 시스템 문서를 rules / reference로 나눠 배치한다.
+- 원칙(Key Characteristics, Typography Principles, Elevation Philosophy, Do/Don't) → `rules/design/`
+- 값·스펙(색 토큰, 타입 스케일, 컴포넌트 스펙, 레이아웃, 섀도우, 반응형) → `references/` (라이브러리 파일과 flat 공존)
 
 ## 3. 파일 배치
 
@@ -67,26 +69,39 @@ React는 베이스로 **항상 자동 포함**된다. 사용자가 별도로 선
 ```
 
 - rules는 프레임워크별 하위 디렉토리로 분리 (겹치는 파일명 공존)
-- references는 플랫하게 배치
+- references는 모두 플랫하게 배치 (라이브러리 + 디자인 파일 공존, 이름 충돌 없음)
 
 ### design 경로
 
-`design.md` 한 파일만 `.claude/references/`에 배치한다:
+`design/rules/*.md` → `.claude/rules/design/`, `design/reference/*.md` → `.claude/references/`(flat)에 배치한다:
 
 ```
 <project-root>/.claude/
-└── references/
-    └── design.md    ← design.md (단일 파일)
+├── rules/
+│   └── design/              ← design/rules/*.md (2개)
+│       ├── principles.md
+│       └── do-donts.md
+└── references/              ← design/reference/*.md (7개, 라이브러리와 flat 공존)
+    ├── visual-theme.md
+    ├── color.md
+    ├── typography.md
+    ├── components.md
+    ├── layout.md
+    ├── elevation.md
+    └── responsive.md
 ```
 
 ## 4. 실행 절차
 
 ### 4a. `/init design` — 디자인 시스템 단독 업데이트
 
-1. `.claude/references/`가 없으면 생성: `mkdir -p <project>/.claude/references`
-2. `design.md`가 이미 존재하면 덮어쓸지 확인
-3. 디자인 시스템 복사: `design.md` → `references/design.md`
-4. 결과 출력
+1. `.claude/rules/design/`가 존재하거나 `.claude/references/`에 디자인 파일(visual-theme, color, typography, components, layout, elevation, responsive) 중 하나라도 있으면 덮어쓸지 확인
+2. 디렉토리 생성:
+   - `mkdir -p <project>/.claude/rules/design`
+   - `mkdir -p <project>/.claude/references`
+3. 디자인 원칙 복사: `design/rules/*.md` → `.claude/rules/design/`
+4. 디자인 참조 복사: `design/reference/*.md` → `.claude/references/`
+5. 결과 출력
 
 ### 4b. `/init [nextjs|vite|react]` — 풀 셋업
 
@@ -110,8 +125,17 @@ React는 베이스로 **항상 자동 포함**된다. 사용자가 별도로 선
 ```
 [nxtdev:init] 디자인 시스템 업데이트 완료
 
-.claude/references/
-  └── design.md  ← 업데이트됨
+.claude/rules/design/ (2개)
+  ├── principles.md
+  └── do-donts.md
+.claude/references/ (+7개)
+  ├── visual-theme.md
+  ├── color.md
+  ├── typography.md
+  ├── components.md
+  ├── layout.md
+  ├── elevation.md
+  └── responsive.md
 ```
 
 `/init [framework]` 실행 시:
