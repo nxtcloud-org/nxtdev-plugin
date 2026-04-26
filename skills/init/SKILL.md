@@ -46,9 +46,10 @@ React는 베이스로 **항상 자동 포함**된다. 사용자가 별도로 선
 
 ### design 경로
 
-규칙 조합 없음. 디자인 시스템 문서를 rules / reference로 나눠 배치한다.
-- 원칙(Key Characteristics, Typography Principles, Elevation Philosophy, Do/Don't) → `rules/design/`
-- 값·스펙(색 토큰, 타입 스케일, 컴포넌트 스펙, 레이아웃, 섀도우, 반응형) → `references/` (라이브러리 파일과 flat 공존)
+규칙 조합 없음. NxtCloud 디자인 시스템은 **단일 `DESIGN.md` 파일**로 관리된다 (Google Labs `DESIGN.md` 스펙 alpha 호환).
+
+- 한 파일 안에 YAML 프론트매터(토큰)와 마크다운 본문(원칙·Do/Don't·반응형 등) 모두 포함
+- 위치: `.claude/rules/design/DESIGN.md` (rules 자동 로드 + 프론트매터의 `paths` 필터로 디자인 관련 파일 작업 시에만 적용)
 
 ## 3. 파일 배치
 
@@ -73,35 +74,26 @@ React는 베이스로 **항상 자동 포함**된다. 사용자가 별도로 선
 
 ### design 경로
 
-`design/rules/*.md` → `.claude/rules/design/`, `design/reference/*.md` → `.claude/references/`(flat)에 배치한다:
+`design/DESIGN.md` 단일 파일을 `.claude/rules/design/DESIGN.md`로 복사한다:
 
 ```
 <project-root>/.claude/
-├── rules/
-│   └── design/              ← design/rules/*.md (2개)
-│       ├── principles.md
-│       └── do-donts.md
-└── references/              ← design/reference/*.md (7개, 라이브러리와 flat 공존)
-    ├── visual-theme.md
-    ├── color.md
-    ├── typography.md
-    ├── components.md
-    ├── layout.md
-    ├── elevation.md
-    └── responsive.md
+└── rules/
+    └── design/
+        └── DESIGN.md        ← design/DESIGN.md (1개)
 ```
+
+- 단일 파일에 토큰(YAML) + 본문(8섹션 + Responsive)이 모두 포함됨
+- 프론트매터의 `paths` 필터로 `*.tsx`, `*.css`, `components/**`, `styles/**` 등 디자인 관련 파일 작업 시에만 자동 로드
 
 ## 4. 실행 절차
 
 ### 4a. `/init design` — 디자인 시스템 단독 업데이트
 
-1. `.claude/rules/design/`가 존재하거나 `.claude/references/`에 디자인 파일(visual-theme, color, typography, components, layout, elevation, responsive) 중 하나라도 있으면 덮어쓸지 확인
-2. 디렉토리 생성:
-   - `mkdir -p <project>/.claude/rules/design`
-   - `mkdir -p <project>/.claude/references`
-3. 디자인 원칙 복사: `design/rules/*.md` → `.claude/rules/design/`
-4. 디자인 참조 복사: `design/reference/*.md` → `.claude/references/`
-5. 결과 출력
+1. `.claude/rules/design/DESIGN.md`가 이미 존재하면 덮어쓸지 확인
+2. 디렉토리 생성: `mkdir -p <project>/.claude/rules/design`
+3. DESIGN.md 복사: `design/DESIGN.md` → `.claude/rules/design/DESIGN.md`
+4. 결과 출력
 
 ### 4b. `/init [nextjs|vite|react]` — 풀 셋업
 
@@ -125,17 +117,10 @@ React는 베이스로 **항상 자동 포함**된다. 사용자가 별도로 선
 ```
 [nxtdev:init] 디자인 시스템 업데이트 완료
 
-.claude/rules/design/ (2개)
-  ├── principles.md
-  └── do-donts.md
-.claude/references/ (+7개)
-  ├── visual-theme.md
-  ├── color.md
-  ├── typography.md
-  ├── components.md
-  ├── layout.md
-  ├── elevation.md
-  └── responsive.md
+.claude/rules/design/
+  └── DESIGN.md         (YAML 토큰 + 본문 8섹션 + 반응형)
+
+총 1개 파일 생성 (DESIGN.md 스펙 alpha 호환)
 ```
 
 `/init [framework]` 실행 시:
