@@ -19,7 +19,7 @@ paths:
 - 상수: UPPER_SNAKE_CASE
 - 타입/인터페이스: PascalCase
 - boolean: `is`/`has`/`should`/`can` 접두사 필수
-- API 함수: [동사][명사]Api (getMeApi, createUserApi)
+- API: [도메인]Api 객체로 정의, 메서드는 도메인 언어 사용 (UserApi.findMe, UserApi.save, UserApi.remove)
 - 이벤트 핸들러: `handle` + 이벤트명 (handleClick, handleChange, handleSubmit)
 - 상태: `[something, setSomething]` 패턴 (useState 컨벤션)
 

@@ -9,7 +9,7 @@ paths:
 
 ## 스택
 
-- React Hook Form + Zod + shadcn/ui Form 조합
+- React Hook Form + Zod 필수, shadcn/ui Form 권장 (미사용 시 직접 구현)
 
 ## 스키마
 
@@ -28,4 +28,4 @@ paths:
 - register() 직접 사용 (FormField + FormControl 필수)
 - 폼 상태 별도 useState로 관리
 
-> 상세 패턴: [reference/react-hook-form.md](../../reference/react-hook-form.md), [reference/zod.md](../../reference/zod.md)
+> 상세 패턴: [reference/react-hook-form.md](../../references/react-hook-form.md), [reference/zod.md](../../references/zod.md)

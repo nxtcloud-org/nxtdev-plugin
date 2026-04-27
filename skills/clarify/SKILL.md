@@ -29,9 +29,16 @@ Ambiguity does not resolve in one pass. Multiple rounds of questions and code ex
 
 ## When NOT To Use
 
-- The request is already specific and clear (proceed to `/plan`)
+- The request is already specific and clear (proceed to `/nxtdev:plan`)
 - The scope is obvious, like a simple bug fix or config change
 - The user explicitly says "don't ask questions, just do it"
+
+## Before Starting: Ruleset Check
+
+Check whether any `.claude/rules/nxtdev-*/` directory exists.
+
+- If missing: ask the user "프로젝트 룰셋이 세팅되어 있지 않습니다. `/nxtdev:init`을 먼저 실행하시겠습니까?"
+- If present: proceed.
 
 ## The Two-Track Process
 
@@ -113,8 +120,8 @@ After the Context Brief is approved, the Complexity Assessment determines the ne
 
 | Verdict | Route | Rationale |
 |---------|-------|-----------|
-| **Simple** (score 5-8) | `/plan` | Task fits in a single plan cycle |
-| **Complex** (score 9-15) | `/ultraplan` | Task requires milestone decomposition |
+| **Simple** (score 5-8) | `/nxtdev:plan` | Task fits in a single plan cycle |
+| **Complex** (score 9-15) | `/nxtdev:masterplan` | Task requires milestone decomposition |
 | **Borderline** (score 8-9) | Present both options with recommendation |
 
 **Override:** The user can always override routing.

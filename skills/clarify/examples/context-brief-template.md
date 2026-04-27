@@ -44,9 +44,9 @@
 
 ### Suggested Next Step
 [Auto-determined by Complexity Assessment verdict]
-- Simple: "Proceed to `/plan` — task fits in a single plan cycle."
-- Complex: "Proceed to `/ultraplan` — task requires milestone decomposition."
-- Borderline: "Recommend `/ultraplan` (score 9), but `/plan` is viable if [condition]. User choice needed."
+- Simple: "Proceed to `/nxtdev:plan` — task fits in a single plan cycle."
+- Complex: "Proceed to `/nxtdev:masterplan` — task requires milestone decomposition."
+- Borderline: "Recommend `/nxtdev:masterplan` (score 9), but `/nxtdev:plan` is viable if [condition]. User choice needed."
 ```
 
 ## Context Brief → Plan Mapping

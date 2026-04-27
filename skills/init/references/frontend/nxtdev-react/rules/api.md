@@ -13,8 +13,10 @@ paths:
 - 인스턴스: lib/api/axios.ts에서 관리
 - 요청 인터셉터: 토큰 추가
 - 응답 인터셉터: 401 시 refresh token 자동 갱신 (무한 루프 방지)
-- API 함수 패턴: [동사][명사]Api (getMeApi, createUserApi)
-- 에러 처리 3단계: Interceptor(401) → API 함수(404) → 컴포넌트(UI)
+- API 패턴: [도메인]Api 객체로 정의 (UserApi.findMe, UserApi.save, UserApi.remove)
+- 에러 처리:
+  - Interceptor: 401(토큰 갱신), 403(권한 없음 redirect), 500+(서버 에러 toast), 네트워크 에러 toast
+  - 그 외 (404 등): TanStack Query isError로 캡처 → 컴포넌트에서 UI 처리
 
 ## TanStack Query
 
@@ -32,4 +34,4 @@ paths:
 - queryKey 하드코딩
 - 루프 안 API 호출 (배치 요청 사용)
 
-> 상세 패턴: [reference/axios.md](../../reference/axios.md), [reference/tanstack-query.md](../../reference/tanstack-query.md)
+> 상세 패턴: [reference/axios.md](../../references/axios.md), [reference/tanstack-query.md](../../references/tanstack-query.md)

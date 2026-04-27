@@ -10,9 +10,9 @@ paths:
 
 - 디렉토리/index.tsx 패턴 필수 (단일 파일 컴포넌트 금지)
 - Named export 필수, default export 금지
-- 컴포넌트 200줄 초과 시 분리
-- 함수 50줄 초과 시 분리
-- useState 5개 초과 시 커스텀 훅 추출
+- 선언 방식: `export const` 사용 (`export function` 금지)
+- 단일 책임: 한 컴포넌트는 하나의 관심사만 담당
+- 너무 많은 역할을 하면 더 작은 컴포넌트로 분리
 
 ## 순수성 (공식 규칙)
 
