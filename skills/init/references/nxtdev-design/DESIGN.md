@@ -12,10 +12,9 @@ paths:
   - "**/styles/**"
 
 colors:
-  primary: "#2E83F2"
-  brand-primary: "#2E83F2"
-  brand-primary-hover: "#1B6BD8"
-  brand-on-primary: "#ffffff"
+  brand: "#2E83F2"
+  brand-hover: "#1B6BD8"
+  brand-on: "#ffffff"
   brand-gradient-from: "#2E83F2"
   brand-gradient-to: "#F24BE7"
 
@@ -147,23 +146,23 @@ spacing:
 
 components:
   button-primary-md:
-    backgroundColor: "{colors.brand-primary}"
-    textColor: "{colors.brand-on-primary}"
+    backgroundColor: "{colors.brand}"
+    textColor: "{colors.brand-on}"
     rounded: "{rounded.md}"
     height: 40px
     padding: 0 18px
     typography: "{typography.body-s}"
   button-primary-md-hover:
-    backgroundColor: "{colors.brand-primary-hover}"
+    backgroundColor: "{colors.brand-hover}"
   button-primary-sm:
-    backgroundColor: "{colors.brand-primary}"
-    textColor: "{colors.brand-on-primary}"
+    backgroundColor: "{colors.brand}"
+    textColor: "{colors.brand-on}"
     rounded: "{rounded.md}"
     height: 32px
     padding: 0 14px
   button-primary-lg:
-    backgroundColor: "{colors.brand-primary}"
-    textColor: "{colors.brand-on-primary}"
+    backgroundColor: "{colors.brand}"
+    textColor: "{colors.brand-on}"
     rounded: "{rounded.md}"
     height: 48px
     padding: 0 22px
@@ -181,7 +180,7 @@ components:
     padding: 0 18px
   button-destructive-md:
     backgroundColor: "{colors.danger}"
-    textColor: "{colors.brand-on-primary}"
+    textColor: "{colors.brand-on}"
     rounded: "{rounded.md}"
     height: 40px
     padding: 0 18px
@@ -268,7 +267,7 @@ What distinguishes NxtCloud's system is its **two-register color strategy**. The
 ### Key Characteristics
 
 - Crisp white canvas (`#ffffff`) — blue earns visibility through restraint everywhere else
-- Single UI color `#2E83F2` (`{colors.brand-primary}`) — exclusive to interactive elements (CTAs, focus rings, links); never decorative in components
+- Single UI color `#2E83F2` (`{colors.brand}`) — exclusive to interactive elements (CTAs, focus rings, links); never decorative in components
 - Logo gradient `#2E83F2` → `#F24BE7` — reserved for logomark, hero sections, and marketing surfaces only
 - Pretendard Variable — Korean-first geometric sans-serif with tight negative tracking at display sizes (32px+)
 - Cool-leaning Zinc neutral scale (slight blue-violet tint) — naturally complements the blue primary
@@ -373,7 +372,7 @@ Effects beyond the eight standard component property tokens:
 - **Destructive inset shadow:** matches Primary inset pattern with `colors.danger` background
 
 States:
-- **Focus:** `outline: 2px solid {colors.brand-primary}; outline-offset: 2px`
+- **Focus:** `outline: 2px solid {colors.brand}; outline-offset: 2px`
 - **Disabled:** `opacity: 0.38; pointer-events: none`
 
 ### Cards
@@ -393,7 +392,7 @@ Pill-shaped (`rounded.full`), padding `3px 10px`, font-size 12px / weight 500. V
 
 Height 40px, `rounded.sm` (10px). Border `1px solid rgba(0,0,0,0.15)`.
 
-- **Focus:** `border-color: {colors.brand-primary}; box-shadow: 0 0 0 3px rgba(46,131,242,0.12)`
+- **Focus:** `border-color: {colors.brand}; box-shadow: 0 0 0 3px rgba(46,131,242,0.12)`
 - **Error:** `border-color: {colors.danger}; box-shadow: 0 0 0 3px rgba(220,38,38,0.12)`
 - **Search variant:** `rounded.full` (pill).
 
@@ -405,7 +404,7 @@ Height 40px, `rounded.sm` (10px). Border `1px solid rgba(0,0,0,0.15)`.
 - Apply negative letter-spacing at all display sizes (32px+) — minimum `-0.32px`
 - Reserve brand color exclusively for interactive elements — CTAs, focus rings, links only
 - Default buttons use Rounded (12px); Pill only for marketing CTAs and tags
-- Apply focus ring consistently: `2px solid {colors.brand-primary}, outline-offset: 2px`
+- Apply focus ring consistently: `2px solid {colors.brand}, outline-offset: 2px`
 - Use `surface-muted` for section backgrounds — expresses hierarchy without shadows
 - Always apply uppercase + letter-spacing `+0.08em` to Overline labels
 - Keep all shadows neutral black — no brand-tinted or warm-tinted shadow colors
@@ -414,7 +413,7 @@ Height 40px, `rounded.sm` (10px). Border `1px solid rgba(0,0,0,0.15)`.
 ### Don't
 
 - Never use font weight 700+ — 600 (Semibold) is the maximum
-- Never hardcode brand colors — always reference tokens (`{colors.brand-primary}`)
+- Never hardcode brand colors — always reference tokens (`{colors.brand}`)
 - Never use `border-radius` below 20px on cards — minimum is `rounded.lg`
 - Never create shadows beyond Level 5 — stay within the defined range
 - Never use Korean text below 12px

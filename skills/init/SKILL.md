@@ -94,7 +94,10 @@ React는 베이스로 **항상 자동 포함**된다. 사용자가 별도로 선
 1. `.claude/rules/nxtdev-design/DESIGN.md`가 이미 존재하면 덮어쓸지 확인
 2. 디렉토리 생성: `mkdir -p <project>/.claude/rules/nxtdev-design`
 3. DESIGN.md 복사: `nxtdev-design/DESIGN.md` → `.claude/rules/nxtdev-design/DESIGN.md`
-4. 결과 출력
+4. `.claude/CLAUDE.md` 병합:
+   - 없으면: `${CLAUDE_SKILL_DIR}/references/nxtdev-design/init.md` 내용으로 새로 생성
+   - 이미 있으면: `## 디자인 시스템 규칙` 섹션이 없을 때만 `nxtdev-design/init.md` 내용을 파일 끝에 추가, 이미 있으면 건드리지 않음 (사용자 수정분 보호)
+5. 결과 출력
 
 ### 4b. `/init [nextjs|vite]` — 풀 셋업
 
@@ -129,8 +132,9 @@ React는 베이스로 **항상 자동 포함**된다. 사용자가 별도로 선
 
 .claude/rules/nxtdev-design/
   └── DESIGN.md         (YAML 토큰 + 본문 8섹션 + 반응형)
+.claude/CLAUDE.md       (디자인 시스템 규칙 섹션 추가)
 
-총 1개 파일 생성
+총 2개 파일 생성/수정
 ```
 
 `/init [framework]` 실행 시:
