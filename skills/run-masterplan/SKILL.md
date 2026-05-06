@@ -18,7 +18,7 @@ argument-hint: "[masterplan-directory-path]"
 2. **state.md는 모든 전이 전후에 갱신됩니다.** 메모리 전용 상태 금지. **디스크에 없으면 일어나지 않은 것으로 간주.** Write-then-verify.
 3. **각 마일스톤은 전체 파이프라인을 완수해야 합니다.** `/plan` → 사용자 승인 → `/run-plan` → Integration Check → Checkpoint. 단축 경로 없음.
 4. **실패한 마일스톤은 의존 마일스톤을 차단합니다.** M2가 M1에 의존하는데 M1이 실패하면, M2는 시작되지 않습니다.
-5. **게이트에서 사용자 확인.** 각 마일스톤의 plan 생성 후, 실행 전에 사용자 승인. 첫 시작 시 현재 상태 보고 후 계속/일시정지/중단 선택.
+5. **게이트에서 사용자 확인은 `AskUserQuestion` 도구로.** 각 마일스톤의 plan 생성 후, 실행 전에 사용자 승인. 첫 시작 시 현재 상태 보고 후 계속/일시정지/중단 선택. 작은 고정 선택지(2-4개)인 모든 분기점에 동일 — 모델이 채팅에 번호 매긴 텍스트 메뉴를 렌더링하지 않습니다.
 6. **완료된 마일스톤을 수정하지 않습니다.** `completed` 상태 마일스톤의 파일은 잠깁니다. 이후 마일스톤이 선행 작업에 변경이 필요하면 그것은 **새 마일스톤**입니다.
 7. **V1은 직렬 실행.** DAG에 병렬 그룹이 있어도 한 번에 하나씩 실행. 병렬 마일스톤은 향후 버전에서 지원.
 
@@ -58,7 +58,10 @@ Masterplan 디렉터리 경로 (예: `docs/masterplans/2026-04-20-auth-rebuild/`
    - 중단 상태 마일스톤 (`planning` / `executing`)
    - `failed` 마일스톤
 5. 사용자에게 상태 요약 제시 (형식은 [resume-protocol.md](references/resume-protocol.md) 참조)
-6. 계속 / 일시정지 / 중단 선택 받기
+6. **`AskUserQuestion`**으로 3택 입력 받기:
+   - **계속 (추천)** — 첫 ready 마일스톤부터 파이프라인 시작
+   - **일시정지** — 현재 상태 그대로 종료, 같은 디렉터리로 재호출 시 재개
+   - **중단** — 세션 중지
 
 **재개 시나리오의 상세 규칙:** [resume-protocol.md](references/resume-protocol.md)
 
@@ -74,7 +77,7 @@ Topological order로 각 마일스톤을 처리합니다. 마일스톤 파이프
 4. **Run Plan** — `/nxtdev:run-plan <plan-path>` 호출. Attempts +1. `/run-plan`의 Worker-Validator 루프와 Final Verification이 마일스톤 검증을 담당
 5. **Integration Check** — 마일스톤 Success Criteria 확인 + cross-milestone interface 호환성
 6. **Checkpoint** — status `completed`, Execution Log 기록 (write-then-verify)
-7. **Next** — 다음 ready 마일스톤으로 이동 전 사용자 확인
+7. **Next** — 다음 ready 마일스톤으로 이동 전 `AskUserQuestion`으로 계속/일시정지 2택 확인
 
 ### Phase 2.5: Failure Handling
 
@@ -93,7 +96,7 @@ Integration Check 실패는 [milestone-pipeline.md#step-5-integration-check](ref
 1. M_final (Integration Verification)을 일반 마일스톤 파이프라인으로 실행
 2. M_final의 plan은 read-only 검증만 포함 — `/run-plan`의 Final Verification Task가 프로젝트 최상위 verification을 전체 코드베이스에 실행
 3. 통과 → Phase 4
-4. 실패 → corrective 마일스톤 제안 (masterplan 재실행 필요) or rollback/수용 선택지 제시
+4. 실패 → `AskUserQuestion`으로 3택 제시: corrective 마일스톤 추가 (masterplan 재실행) / 이전 상태로 rollback / 통합 격차 수용 (상세는 [milestone-pipeline.md Step 5](references/milestone-pipeline.md))
 
 ### Phase 4: Completion
 
@@ -121,7 +124,11 @@ Integration Check 실패는 [milestone-pipeline.md#step-5-integration-check](ref
 [모든 마일스톤에 걸친 집계 파일 목록]
 ```
 
-3. 사용자에게 다음 단계 안내 — 코드 품질 점검이 필요하면 `/simplify` 제안.
+3. **`AskUserQuestion`**으로 다음 단계 4택 제시 (Transition 섹션과 정합):
+   - **`/simplify` 실행 (추천)** — 마스터플랜 직후 코드 품질 점검
+   - **`/nxtdev:masterplan` 재실행** — corrective 마일스톤 추가가 필요한 경우
+   - **`/nxtdev:debug`** — 발견된 이슈를 별도로 디버깅
+   - **종료** — 별도 액션 없이 세션 마무리
 
 ## Execution Handoff
 

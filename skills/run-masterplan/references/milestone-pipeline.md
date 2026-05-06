@@ -33,14 +33,9 @@
 
 ## Step 3: User Approval Gate
 
-Plan이 작성된 후, 실행 전에 사용자 승인을 받습니다:
+Plan이 작성된 후, 실행 전에 `AskUserQuestion`으로 3택 제시 (질문 본문에 plan 파일 경로 `<plan-path>` 포함):
 
-```
-M{N} plan이 작성되었습니다: <plan-path>
-plan을 검토하고 실행을 승인하시겠습니까? (승인 / 수정 요청 / 중단)
-```
-
-- **승인** → Step 4
+- **승인 (추천)** → Step 4
 - **수정 요청** → 사용자 피드백을 Context Brief 제약으로 추가하고 Step 2 재실행 (state.md에 plan 파일 새로 기록)
 - **중단** → 이 세션 종료. state.md는 planning 상태로 남음 — 다음 호출에서 resume 가능
 
@@ -76,10 +71,10 @@ plan을 검토하고 실행을 승인하시겠습니까? (승인 / 수정 요청
 **Integration Check 실패 시:**
 
 1. 1회 targeted 수정 시도 (`/run-plan`이 아닌 단순 `Edit`) → 재검사
-2. 여전히 실패 → 사용자에게 보고, 옵션 제시:
-   - Corrective 마일스톤 추가 (masterplan 재실행 필요)
-   - 이전 상태로 rollback (git reset, 사용자 확인 필수)
-   - 통합 격차를 수용하고 계속 (사용자 명시 승인)
+2. 여전히 실패 → 사용자에게 실패 내역 보고 후 `AskUserQuestion`으로 3택 제시:
+   - **Corrective 마일스톤 추가** — masterplan 재실행 필요
+   - **이전 상태로 rollback** — git reset, 사용자 확인 필수
+   - **통합 격차 수용하고 계속** — 사용자 명시 승인
 
 ## Step 6: Checkpoint
 
@@ -92,12 +87,10 @@ Integration Check 통과 후:
 ## Step 7: Next
 
 1. 다음 ready 마일스톤 선택 (모든 dependency가 `completed`인 것 중 첫 번째)
-2. 사용자에게 계속할지 확인:
-   ```
-   M{N} 완료. 다음: M{K}. 계속하시겠습니까? (계속 / 일시정지)
-   ```
-3. 계속 → Step 1 재시작 with 다음 마일스톤
-4. 모든 마일스톤(M_final 포함) 완료 → Completion Summary
+2. `AskUserQuestion`으로 2택 제시 (질문 본문에 `M{N} 완료. 다음: M{K}.` 컨텍스트 포함):
+   - **계속 (추천)** → Step 1 재시작 with 다음 마일스톤
+   - **일시정지** → state.md를 그대로 두고 종료, 다음 호출에서 같은 지점에서 재개
+3. 모든 마일스톤(M_final 포함) 완료 → Completion Summary
 
 ## M_final (Integration Verification)
 
