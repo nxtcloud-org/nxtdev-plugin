@@ -48,7 +48,7 @@ const store = useFilterStore(); // 아무 값 바뀌어도 리렌더링
 ## URL 상태
 
 - 공유/북마크 가능해야 하는 값 (검색어, 페이지 번호, 필터)
-- useSearchParams (React Router) 또는 라우터 파라미터
+- useSearchParams (Next.js: `next/navigation`, React Router: `react-router-dom`) 또는 라우터 파라미터
 
 ## 금지
 
@@ -56,4 +56,4 @@ const store = useFilterStore(); // 아무 값 바뀌어도 리렌더링
 - Context에 자주 바뀌는 값 넣기 (리렌더링 폭탄)
 - Zustand 스토어에서 전체 state 구독 (selector 없이)
 
-> 상세 패턴: [reference/zustand.md](../../reference/zustand.md), [reference/tanstack-query.md](../../reference/tanstack-query.md)
+> 상세 패턴: [reference/zustand.md](../../references/zustand.md), [reference/tanstack-query.md](../../references/tanstack-query.md)

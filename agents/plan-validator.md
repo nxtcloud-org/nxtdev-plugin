@@ -3,7 +3,7 @@ name: plan-validator
 description: Independent plan task validator — judges codebase against task goals under strict information barrier. Read-only. Never modifies files.
 model: sonnet
 maxTurns: 15
-tools: Read Glob Grep Bash(npm test *) Bash(npx jest *) Bash(npx vitest *) Bash(pytest *) Bash(python -m pytest *) Bash(go test *) Bash(cargo test *) Bash(make test *) Bash(bun test *)
+tools: Read Glob Grep Bash(npm test *) Bash(npx jest *) Bash(npx vitest *) Bash(pytest *) Bash(python -m pytest *) Bash(go test *) Bash(cargo test *) Bash(make test *) Bash(bun test *) Bash(npm run build *) Bash(npm run typecheck *) Bash(npm run lint *) Bash(npx tsc *) Bash(npx next build *) Bash(npx vite build *) Bash(npx eslint *)
 ---
 
 # Plan Validator

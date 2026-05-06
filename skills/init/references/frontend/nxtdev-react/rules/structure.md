@@ -13,10 +13,11 @@ src/
       index.tsx
   features/         ← 도메인별 모듈
     auth/
-      api.ts        ← API 함수
-      types.ts      ← 타입 정의
+      api.ts        ← API 호출만 (도메인 언어로 메서드 정의)
+      service.ts    ← 순수 비즈니스 로직 (React 의존 없음)
+      types.ts      ← 도메인 타입 정의
       schemas.ts    ← Zod 스키마
-      hooks.ts      ← 커스텀 훅
+      hooks.ts      ← api.ts + service.ts 연결, UI 상태만
   hooks/            ← 전역 공통 훅만
   lib/              ← 외부 라이브러리 설정/래퍼
     utils.ts        ← cn() 등

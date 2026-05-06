@@ -11,7 +11,7 @@ HTTP 클라이언트 라이브러리.
 - 인스턴스: `src/lib/api/axios.ts`에서 생성
 - 요청 인터셉터: 토큰 추가
 - 응답 인터셉터: 401 시 refresh token 자동 갱신 (무한 루프 방지)
-- API 함수 패턴: `[동사][명사]Api` (getMeApi, createUserApi)
+- API 패턴: `[도메인]Api` 객체로 정의 (UserApi.findMe, UserApi.save)
 
 ## 기본 설정
 
@@ -31,16 +31,35 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// 응답 인터셉터 (401 자동 갱신)
+// 응답 인터셉터
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    if (error.response?.status === 401 && !error.config._retry) {
+    const status = error.response?.status;
+
+    // 401: 토큰 갱신 후 재시도
+    if (status === 401 && !error.config._retry) {
       error.config._retry = true;
       const newToken = await refreshToken();
       error.config.headers.Authorization = `Bearer ${newToken}`;
       return api(error.config);
     }
+
+    // 403: 권한 없음
+    if (status === 403) {
+      redirect('/forbidden');
+    }
+
+    // 500+: 서버 에러
+    if (status >= 500) {
+      toast.error('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+    }
+
+    // 네트워크 에러 (서버 응답 없음)
+    if (!error.response) {
+      toast.error('네트워크 연결을 확인해주세요.');
+    }
+
     return Promise.reject(error);
   }
 );
