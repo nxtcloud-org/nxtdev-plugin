@@ -1,6 +1,6 @@
 # Synthesis Agent Prompt
 
-After all 5 reviewers complete, dispatch a **single synthesis `Agent` call** (use `subagent_type: "general-purpose"`) that receives every reviewer's output and produces the final milestone plan.
+After all 5 reviewers complete, dispatch a **single synthesis `Agent` call** (use `subagent_type: "masterplan-synthesis"`) that receives every reviewer's output and produces the final milestone plan.
 
 ## Verbatim Handoff Rule (Hard Gate)
 
