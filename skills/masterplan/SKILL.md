@@ -21,7 +21,7 @@ Milestones are the unit of multi-day execution. A bad milestone decomposition ca
 5. **Every milestone must have measurable success criteria.** "Working correctly" is not a criterion. Test commands, file existence checks, or behavioral assertions are required — at least 2 per milestone.
 6. **Milestone dependencies must form a DAG.** Circular dependencies are a plan failure. Every milestone must have a clear topological ordering.
 7. **Do not generate milestones for trivial tasks.** If the problem fits in a single `/nxtdev:plan` cycle (fewer than ~8 tasks), stop and tell the user to use `/nxtdev:plan` directly.
-8. **Reviewer outputs must be passed verbatim to the synthesis agent.** No summarizing, filtering, reframing, or editorial framing. See `references/synthesis-agent.md` for the rule.
+8. **Reviewer outputs are written verbatim to disk by the reviewer agent and Read verbatim by the synthesis agent.** Each reviewer self-Writes its analysis to `docs/masterplans/{PLAN_ID}/_reviews/<reviewer>.md`. The main agent must not regenerate, summarize, filter, reframe, or alter the text — it only forwards `{PLAN_ID}` to the synthesis agent. See `references/synthesis-agent.md` for the rule.
 
 ## When To Use
 
@@ -63,13 +63,22 @@ Context Brief가 없습니다. 어떻게 진행할까요?
 4. **Verification Discovery** — `skills/plan/references/verification-discovery.md`의 절차를 따라 프로젝트의 최상위 검증 수단 발견 (e2e → integration → skill/agent → test-suite → build-only)
 5. **Problem Brief 작성** — `examples/problem-brief-template.md` 형식으로 자기완결적 문서 작성. 이것이 5개 리뷰어 모두가 받는 유일한 입력.
 
+### Phase 2.0: Initialize Plan Directory
+
+리뷰어 디스패치 **이전에** 메인 에이전트가 단일 `Bash` 호출로 다음을 수행합니다:
+
+1. `{PLAN_ID}` 결정 — `YYYY-MM-DD-<feature-slug>` 형식. 사용자가 슬러그를 명시하지 않은 경우 Problem Brief의 goal에서 자동 도출.
+2. `mkdir -p docs/masterplans/{PLAN_ID}/_reviews` — 5명 리뷰어가 자기 review 파일을 Write 할 디렉터리.
+
+이 디렉터리가 없으면 리뷰어의 `Write` 호출이 실패합니다.
+
 ### Phase 2: Parallel Reviewer Dispatch
 
-**Hard Gate #1-3:** 한 메시지 안에 5개의 `Agent` 호출을 병렬로 넣습니다. 각 리뷰어는 전체 Problem Brief를 받습니다. 서로의 결과를 보지 않습니다.
+**Hard Gate #1-3:** 한 메시지 안에 5개의 `Agent` 호출을 병렬로 넣습니다. 각 리뷰어는 전체 Problem Brief와 `{PLAN_ID}`를 받습니다. 서로의 결과를 보지 않습니다.
 
 디스패치 패턴과 각 리뷰어 프롬프트는 [reviewer-prompts.md](references/reviewer-prompts.md) 참조.
 
-리뷰어는 읽기 전용 분석가입니다 — 코드를 수정하지 않습니다.
+리뷰어는 분석가입니다 — 일반 코드를 수정하지 않습니다. 단 자신의 review 파일(`_reviews/<reviewer>.md`) **하나**에 한해 셀프 Write 를 수행합니다 (reviewer-self-write 패턴, Hard Gate #8). 디스패치된 5개 리뷰어의 반환값은 각각 한 줄 `REVIEW_WRITTEN: <path>` 입니다.
 
 ### Phase 2.5: Reviewer Failure Handling
 
@@ -79,9 +88,11 @@ Context Brief가 없습니다. 어떻게 진행할까요?
 
 ### Phase 3: Synthesis
 
-5개 리뷰가 모두 완료되면 **Synthesis Agent**를 디스패치합니다. 모든 리뷰어 출력을 받아 최종 마일스톤 계획을 생성합니다.
+5개 리뷰가 모두 완료되면(또는 Phase 2.5 실패 처리 후 ≥3개) **Synthesis Agent**를 디스패치합니다. Synthesis Agent 가 `_reviews/<reviewer>.md` 5개를 직접 Read 하여 최종 마일스톤 계획을 생성합니다.
 
-**Verbatim Handoff (Hard Gate #8):** 각 리뷰어의 전체 출력을 Synthesis 프롬프트의 `{..._OUTPUT}` 자리에 요약/필터링/재구성/추가 설명 없이 그대로 복사합니다. 상세: [synthesis-agent.md](references/synthesis-agent.md).
+**Verbatim Handoff (Hard Gate #8):** 메인 에이전트는 Synthesis 프롬프트에 `{PLAN_ID}`만 전달합니다 — 리뷰어 본문은 절대 인라인하지 마십시오. Synthesis Agent 가 `docs/masterplans/{PLAN_ID}/_reviews/*.md` 5개를 Read 하여 본문을 verbatim 으로 받습니다. 일부 리뷰어가 Phase 2.5 에서 누락된 경우 그 사실을 `Missing perspective: ...` 한 줄로 Synthesis 프롬프트에 추가하십시오. 상세: [synthesis-agent.md](references/synthesis-agent.md).
+
+이 단일 변경(인라인 → 파일)으로 메인 LLM 오케스트레이터의 review→synthesis dispatch turn 이 33k output_tokens / 8.5분 → ~500 tokens / ~10초로 축소됩니다 (2026-05-07 측정 기반). 추적은 `~/.claude/plans/d-proud-liskov.md` 참조.
 
 ### Phase 3.5: Integration Verification Milestone (자동)
 
@@ -118,6 +129,12 @@ M_final을 추가한 후, main agent가 **독립적으로** 전체 DAG를 검증
 docs/masterplans/YYYY-MM-DD-<feature-slug>/
 ├── state.md                         # 마스터 상태 파일 (state-template.md 참조)
 ├── synthesis.md                     # Synthesis Agent 출력 원문 (Conflict Resolution Log + Milestone DAG)
+├── _reviews/                        # Phase 2.0에서 생성, Phase 2에서 reviewer 5명이 직접 Write
+│   ├── feasibility.md
+│   ├── architecture.md
+│   ├── risk.md
+│   ├── dependency.md
+│   └── user-value.md
 └── milestones/
     ├── M1-<name>.md                 # 개별 마일스톤 (milestone-template.md 참조)
     ├── M2-<name>.md
@@ -125,7 +142,9 @@ docs/masterplans/YYYY-MM-DD-<feature-slug>/
     └── M_final-integration-verification.md
 ```
 
-리뷰어 원문은 저장하지 않습니다. 마일스톤 결정의 근거는 `synthesis.md`의 Conflict Resolution Log와 Rejected Proposals 표로 추적합니다 — 리뷰어 5명의 출력 전체를 디스크에 보관하는 비용이 절감되는 audit 정밀도보다 크다고 판단했기 때문입니다 (이전 측정치: 5개 review 파일 직렬 Write에 9분 21초 소요).
+리뷰어 원문은 `_reviews/<reviewer>.md` 로 **각 reviewer agent 가 직접 Write** 합니다 (reviewer-self-write 패턴, 2026-05-07 도입). 이전 verbatim-inline 패턴이 메인 LLM 오케스트레이터의 single completion 으로 33k output_tokens / 8분 30초를 태우던 구조적 병목을 제거하기 위함입니다 (세션 2a2a1b7a 측정). 부수 효과로 audit 정밀도도 향상됩니다 — 리뷰어 본문이 영구 보존되어 마일스톤 결정의 근거를 추적 가능합니다.
+
+이 패턴은 `feedback_review_agents_readonly.md` 의 명시적 예외에 해당합니다 (2026-05-07 갱신). reviewer 의 Write 권한은 자기 review 파일 하나에 한정되며, Edit/NotebookEdit/타 경로 접근은 여전히 금지됩니다. `masterplan-synthesis` 는 read-only 상태를 유지합니다.
 
 #### Hard Gate: 단일 메시지 Batch Write
 

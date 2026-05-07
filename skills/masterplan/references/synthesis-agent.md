@@ -4,13 +4,16 @@ After all 5 reviewers complete, dispatch a **single synthesis `Agent` call** (us
 
 ## Verbatim Handoff Rule (Hard Gate)
 
-The main agent must copy each reviewer's full output into the designated `{..._OUTPUT}` placeholder **without summarizing, filtering, reframing, or adding commentary**. The main agent has read all 5 outputs and may unconsciously bias the synthesis by selective framing. Verbatim copy eliminates that channel.
+Reviewer outputs reach the synthesis agent **on disk**, not inline in the prompt. Each reviewer Writes its own analysis to `docs/masterplans/{PLAN_ID}/_reviews/<reviewer>.md` (reviewer-self-write pattern, 2026-05-07). The synthesis agent Reads each file directly and treats every byte as authoritative — **no summarizing, filtering, reframing, or commentary** by the main agent or by synthesis itself.
+
+**Why a file, not an inline prompt slot:** the previous inline pattern forced the main LLM orchestrator to re-emit ~33k output_tokens (≈8.5 min single completion on Opus 4.7 1M) just to copy 5 reviewer outputs into the synthesis prompt. The file-based handoff keeps the same non-modification invariant while removing that bottleneck. **The transport medium changed (inline prompt → on-disk file). The non-modification invariant is unchanged.**
 
 **What must NOT happen during handoff:**
 - Summarizing a reviewer's output ("The feasibility analyst mainly said...")
 - Filtering out findings the main agent considers irrelevant
 - Adding framing language ("Pay special attention to the risk analyst's concerns about...")
 - Reordering findings by perceived importance
+- Editing the reviewer's file after it was Written (the file is immutable for the rest of the masterplan run)
 
 ## Synthesis Prompt Template
 
@@ -19,22 +22,22 @@ You are a milestone synthesis agent. You have received analyses from 5 independe
 reviewers who each examined the same problem from a different angle. Your job is to
 produce the final milestone decomposition.
 
+## Plan ID
+
+{PLAN_ID}
+
 ## Reviewer Outputs
 
-### Feasibility Analysis
-{FEASIBILITY_OUTPUT}
+Read all 5 reviewer files (verbatim — no summarizing or filtering):
 
-### Architecture Analysis
-{ARCHITECTURE_OUTPUT}
+- docs/masterplans/{PLAN_ID}/_reviews/feasibility.md
+- docs/masterplans/{PLAN_ID}/_reviews/architecture.md
+- docs/masterplans/{PLAN_ID}/_reviews/risk.md
+- docs/masterplans/{PLAN_ID}/_reviews/dependency.md
+- docs/masterplans/{PLAN_ID}/_reviews/user-value.md
 
-### Risk Analysis
-{RISK_OUTPUT}
-
-### Dependency Analysis
-{DEPENDENCY_OUTPUT}
-
-### User Value Analysis
-{USER_VALUE_OUTPUT}
+If any file is missing, abort and respond with:
+  REVIEW_FILE_MISSING: <path>
 
 ## Your Task
 
