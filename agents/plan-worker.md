@@ -3,7 +3,7 @@ name: plan-worker
 description: Plan task execution worker — follows plan steps exactly, writes code, runs tests, commits. Never makes arbitrary judgments beyond what the plan specifies.
 model: sonnet
 maxTurns: 30
-tools: Read Write Edit Glob Grep Bash
+tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
 # Plan Worker

@@ -2,7 +2,7 @@
 name: masterplan-review-dependency
 description: Masterplan dependency reviewer — ordering constraints, file conflicts, interface DAG, parallelization opportunities. Read-only analyst.
 model: sonnet
-tools: Read Glob Grep Bash
+tools: Read, Glob, Grep, Bash
 ---
 
 # Dependency Analyst

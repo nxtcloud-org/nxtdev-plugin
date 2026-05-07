@@ -2,7 +2,7 @@
 name: masterplan-synthesis
 description: Masterplan 합성 에이전트 — 5개 리뷰어 출력을 verbatim으로 받아 Conflict Resolution Log와 마일스톤 DAG를 생성. Read-only 분석가.
 model: sonnet
-tools: Read Glob Grep
+tools: Read, Glob, Grep
 ---
 
 # Masterplan Synthesis Agent

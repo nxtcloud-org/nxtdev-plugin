@@ -3,7 +3,7 @@ name: plan-review-verification
 description: Plan reviewer — checks verification coverage. Verifies Final Verification Task exists and test commands are complete.
 model: sonnet
 maxTurns: 10
-tools: Read Grep
+tools: Read, Grep
 ---
 
 # Verification Coverage Reviewer

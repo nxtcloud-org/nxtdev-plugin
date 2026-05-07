@@ -2,7 +2,7 @@
 name: masterplan-review-feasibility
 description: Masterplan feasibility reviewer — technical viability, effort estimation, hidden complexity, natural milestone boundaries. Read-only analyst.
 model: sonnet
-tools: Read Glob Grep Bash
+tools: Read, Glob, Grep, Bash
 ---
 
 # Feasibility Analyst

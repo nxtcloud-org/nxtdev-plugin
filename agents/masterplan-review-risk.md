@@ -2,7 +2,7 @@
 name: masterplan-review-risk
 description: Masterplan risk reviewer — integration risk, ambiguity, regressions, recovery cost, risk-ordered sequencing. Read-only analyst.
 model: sonnet
-tools: Read Glob Grep Bash
+tools: Read, Glob, Grep, Bash
 ---
 
 # Risk Analyst

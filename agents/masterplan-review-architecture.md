@@ -2,7 +2,7 @@
 name: masterplan-review-architecture
 description: Masterplan architecture reviewer — interfaces, data flow, dependency direction, incremental deliverability, pattern alignment. Read-only analyst.
 model: sonnet
-tools: Read Glob Grep Bash
+tools: Read, Glob, Grep, Bash
 ---
 
 # Architecture Analyst

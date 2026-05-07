@@ -3,7 +3,7 @@ name: plan-review-types
 description: Plan reviewer — checks type and naming consistency across tasks. Finds mismatched signatures, renamed variables, wrong imports.
 model: sonnet
 maxTurns: 10
-tools: Read Grep
+tools: Read, Grep
 ---
 
 # Type Consistency Reviewer
