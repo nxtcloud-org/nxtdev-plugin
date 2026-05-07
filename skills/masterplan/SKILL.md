@@ -117,21 +117,30 @@ M_final을 추가한 후, main agent가 **독립적으로** 전체 DAG를 검증
 ```
 docs/masterplans/YYYY-MM-DD-<feature-slug>/
 ├── state.md                         # 마스터 상태 파일 (state-template.md 참조)
-├── milestones/
-│   ├── M1-<name>.md                 # 개별 마일스톤 (milestone-template.md 참조)
-│   ├── M2-<name>.md
-│   ├── ...
-│   └── M_final-integration-verification.md
-└── reviews/
-    ├── feasibility.md               # 5개 리뷰어 출력 원문 저장
-    ├── architecture.md
-    ├── risk.md
-    ├── dependency.md
-    ├── user-value.md
-    └── synthesis.md                 # Synthesis Agent 출력 원문 (Conflict Resolution Log 포함)
+├── synthesis.md                     # Synthesis Agent 출력 원문 (Conflict Resolution Log + Milestone DAG)
+└── milestones/
+    ├── M1-<name>.md                 # 개별 마일스톤 (milestone-template.md 참조)
+    ├── M2-<name>.md
+    ├── ...
+    └── M_final-integration-verification.md
 ```
 
-리뷰 원문을 저장하는 이유: 향후 마일스톤 결정의 근거를 추적할 수 있고, 실행 중 문제가 생기면 감사(audit) 가능합니다.
+리뷰어 원문은 저장하지 않습니다. 마일스톤 결정의 근거는 `synthesis.md`의 Conflict Resolution Log와 Rejected Proposals 표로 추적합니다 — 리뷰어 5명의 출력 전체를 디스크에 보관하는 비용이 절감되는 audit 정밀도보다 크다고 판단했기 때문입니다 (이전 측정치: 5개 review 파일 직렬 Write에 9분 21초 소요).
+
+#### Hard Gate: 단일 메시지 Batch Write
+
+Phase 5의 모든 `Write` 호출(`synthesis.md`, `milestones/M1-...md` ~ `M_final-...md`, `state.md`)은 **단일 응답에 다중 도구 호출로 묶어 발행**해야 합니다. 파일을 하나씩 별개 응답으로 쓰지 마십시오.
+
+순차 Write 안티패턴 (금지):
+- 응답 N: `Write(synthesis.md)` → 도구 결과 대기
+- 응답 N+1: `Write(milestones/M1-...md)` → 도구 결과 대기
+- 응답 N+2: `Write(milestones/M2-...md)` → ...
+
+각 응답마다 LLM round-trip이 발생하여 milestone 6개 + state.md 작성에 약 2분 24초가 추가로 소요됨이 측정되었습니다 (2026-05-07 세션).
+
+올바른 패턴: 단일 응답에서 모든 산출물 `Write` 호출을 동시에 발행합니다. 이는 Phase 2의 5개 리뷰어 단일 메시지 디스패치(Hard Gate #1)와 동일한 메커니즘입니다.
+
+Synthesis 출력은 Phase 3 종료 시점 메인 에이전트 컨텍스트에 있고, 마일스톤 본문도 Synthesis 출력으로부터 도출되어 단일 응답 안에서 모두 구성 가능합니다.
 
 ## Execution Handoff
 
@@ -152,8 +161,8 @@ docs/masterplans/YYYY-MM-DD-<feature-slug>/
 | 마일스톤이 너무 작음(1-2 태스크) | `/plan` + `/run-plan` 오버헤드가 작업보다 큼 |
 | 10개 초과 마일스톤 사용자 승인 없이 진행 | 리스크 누적, 프로젝트 분할이 더 나을 가능성 |
 | 리뷰어 충돌 무시 | 실행 단계에서 드러날 때 수정 비용이 훨씬 큼 |
-| 리뷰어 출력 미저장 | 마일스톤 결정 근거 소실, 사후 감사 불가 |
 | 사용자 승인 건너뛰기 | 다일 작업 중간에 방향 어긋남 발견 |
+| 산출물 파일을 한 번에 하나씩 별개 응답으로 Write | 응답마다 LLM round-trip 발생 → Phase 5에 수 분 누적 (2026-05-07 측정 약 2분 24초). 단일 메시지 batch가 필수 |
 
 ## Minimal Checklist
 
