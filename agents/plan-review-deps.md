@@ -3,7 +3,7 @@ name: plan-review-deps
 description: Plan reviewer — verifies dependency chains and parallel safety. Finds missing dependencies, file conflicts, ordering bugs.
 model: sonnet
 maxTurns: 10
-tools: Read Grep
+tools: Read, Grep
 ---
 
 # Dependency Reviewer

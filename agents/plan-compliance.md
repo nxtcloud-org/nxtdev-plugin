@@ -3,7 +3,7 @@ name: plan-compliance
 description: Pre-task compliance check — verifies predecessor outputs exist, file state is ready, and dependencies are met before task execution. Read-only.
 model: sonnet
 maxTurns: 10
-tools: Read Glob Grep Bash(ls *) Bash(test *) Bash(git status) Bash(git diff *) Bash(git log *)
+tools: Read, Glob, Grep, Bash(ls *), Bash(test *), Bash(git status), Bash(git diff *), Bash(git log *)
 ---
 
 # Plan Compliance Checker

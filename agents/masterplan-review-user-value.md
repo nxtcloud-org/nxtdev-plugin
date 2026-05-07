@@ -2,7 +2,7 @@
 name: masterplan-review-user-value
 description: Masterplan user value reviewer — value ordering, demo-ability, minimum viable milestone, natural abort points. Read-only analyst.
 model: sonnet
-tools: Read Glob Grep Bash
+tools: Read, Glob, Grep, Bash
 ---
 
 # User Value Analyst

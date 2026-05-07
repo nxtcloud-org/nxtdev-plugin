@@ -3,7 +3,7 @@ name: plan-review-spec
 description: Plan reviewer — checks spec coverage. Verifies every requirement has a corresponding task.
 model: sonnet
 maxTurns: 10
-tools: Read Glob Grep
+tools: Read, Glob, Grep
 ---
 
 # Spec Coverage Reviewer

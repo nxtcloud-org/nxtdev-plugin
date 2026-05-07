@@ -3,7 +3,7 @@ name: plan-review-placeholder
 description: Plan reviewer — scans for placeholder patterns. Finds TBD, TODO, vague steps, missing code blocks.
 model: sonnet
 maxTurns: 10
-tools: Read Grep
+tools: Read, Grep
 ---
 
 # Placeholder Scanner
