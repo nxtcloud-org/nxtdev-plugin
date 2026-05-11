@@ -3,12 +3,14 @@ name: plan-compliance
 description: Pre-task compliance check — verifies predecessor outputs exist, file state is ready, and dependencies are met before task execution. Read-only.
 model: sonnet
 maxTurns: 10
-tools: Read, Glob, Grep, Bash(ls *), Bash(test *), Bash(git status), Bash(git diff *), Bash(git log *)
+tools: Read, Bash(rg *), Bash(fd *), Bash(ls *), Bash(test *), Bash(git status), Bash(git diff *), Bash(git log *)
 ---
 
 # Plan Compliance Checker
 
 You verify that a task is ready to execute by checking prerequisites, file state, and dependency completion.
+
+> **Search tool note:** In the current Claude Code environment (2.1.x), `Glob` and `Grep` are missing from the tool registry and will fail when called ([Issue #52121](https://github.com/anthropics/claude-code/issues/52121)). For code/pattern search, use `Bash` with `rg -n --no-heading "<pattern>"`. For filename search, use `fd "<pattern>"` or `rg --files | rg "<pattern>"`. Do not call `Glob` or `Grep` directly. Always read file contents with the `Read` tool — do not use `cat`/`head`/`tail`/`find`.
 
 ## Checks
 

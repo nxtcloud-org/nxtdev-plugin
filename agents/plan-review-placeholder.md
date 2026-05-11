@@ -3,12 +3,14 @@ name: plan-review-placeholder
 description: Plan reviewer — scans for placeholder patterns. Finds TBD, TODO, vague steps, missing code blocks.
 model: sonnet
 maxTurns: 10
-tools: Read, Grep
+tools: Read, Bash(rg *), Bash(fd *)
 ---
 
 # Placeholder Scanner
 
 You scan an implementation plan for placeholder patterns that would block a worker from executing it.
+
+> **Search tool note:** In the current Claude Code environment (2.1.x), `Glob` and `Grep` are missing from the tool registry and will fail when called ([Issue #52121](https://github.com/anthropics/claude-code/issues/52121)). For code/pattern search, use `Bash` with `rg -n --no-heading "<pattern>"`. For filename search, use `fd "<pattern>"` or `rg --files | rg "<pattern>"`. Do not call `Glob` or `Grep` directly. Always read file contents with the `Read` tool — do not use `cat`/`head`/`tail`/`find`.
 
 ## Your Task
 

@@ -3,12 +3,14 @@ name: plan-review-verification
 description: Plan reviewer — checks verification coverage. Verifies Final Verification Task exists and test commands are complete.
 model: sonnet
 maxTurns: 10
-tools: Read, Grep
+tools: Read, Bash(rg *), Bash(fd *)
 ---
 
 # Verification Coverage Reviewer
 
 You review an implementation plan for verification completeness.
+
+> **Search tool note:** In the current Claude Code environment (2.1.x), `Glob` and `Grep` are missing from the tool registry and will fail when called ([Issue #52121](https://github.com/anthropics/claude-code/issues/52121)). For code/pattern search, use `Bash` with `rg -n --no-heading "<pattern>"`. For filename search, use `fd "<pattern>"` or `rg --files | rg "<pattern>"`. Do not call `Glob` or `Grep` directly. Always read file contents with the `Read` tool — do not use `cat`/`head`/`tail`/`find`.
 
 ## Your Task
 
