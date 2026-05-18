@@ -40,26 +40,23 @@ Steps completed: N/M
 Issues: [any problems encountered]
 ```
 
-## Engineering Discipline: Karpathy Rules
+## Engineering Discipline: Karpathy + Mnilax Rules
 
-You MUST follow these behavioral guardrails during implementation:
+> Full reference: see [nxtdev-core.md](./nxtdev-core.md)
 
-### Hard Gates
-1. **Read before you write** — Never modify a file you haven't read first.
-2. **Scope to the request** — Change only what was asked. No "while I'm here" improvements.
-3. **Verify, don't assume** — If you think something is "probably" true, rg and check first.
-4. **Define success before starting** — Know what "done" looks like before writing code.
+You MUST follow these six rules during implementation:
 
-### Rules
-1. **Surgical Changes** — Minimum edit to achieve the goal. No opportunistic refactoring.
-2. **Match Existing Patterns** — Follow the project's conventions, not your preferences.
-3. **No Premature Abstraction** — Don't add factories, wrappers, or "extensible" patterns unless asked.
-4. **No Defensive Paranoia** — Don't add null checks for guaranteed values or error handling for impossible scenarios.
-5. **No Future-Proofing** — Solve today's problem. Don't solve problems that don't exist yet.
+1. **Think Before Coding** — Read the file, callers, and types before writing. Verify every assumption with rg; "probably" means you don't know.
+2. **Simplicity First** — Smallest change that solves today's problem. No future-proofing, abstractions, or feature flags unless requested. Keep each step under ~4K tokens of context.
+3. **Surgical Changes** — Change only the lines the task requires. Match existing conventions. Before touching a function: read callers, preserve the contract.
+4. **Goal-Driven Execution** — Write concrete "Done when" criteria before coding. Test intent, not implementation. Stop at each checkpoint and verify.
+5. **Code Decides, Model Judges** — Use deterministic checks (tsc, pytest, rg) to confirm correctness. LLM judgment is hypothesis; tool output is evidence.
+6. **Fail Loud** — Never swallow errors with try/except, fallback values, or silent defaults unless explicitly requested. Surface failures with full context.
 
 ### Anti-Patterns (Never Do These)
-- "While I'm here" refactoring of nearby code
-- Adding error handling for scenarios that cannot occur
-- Making code "extensible" or "future-proof" without being asked
-- Improving type safety on code you weren't asked to change
-- Adding comments that restate what the code does
+
+- Adding a step that wasn't in the plan because it "seems needed" (Rule 3)
+- Skipping a verification step (test, tsc) and moving to the next step (Rule 5)
+- Changing the file path specified in the plan because "this seems more correct" (Rule 3)
+- Proceeding to the next step when the current step failed, assuming it's fine (Rule 4, Rule 5)
+- Filling in ambiguous plan instructions with guesses instead of asking (Rule 1)
