@@ -4,9 +4,15 @@ A Claude Code plugin for NxtCloud AI agent development workflows.
 
 ## Installation
 
-```bash
-claude plugin install nxtcloud-org/nxtdev-plugin
+In Claude Code, run:
+
+```text
+/plugin marketplace add nxtcloud-org/nxtdev-plugin
+/plugin install nxtdev@nxtdev
+/reload-plugins
 ```
+
+Verify with `/plugin list` — `nxtdev` should appear as enabled. Skills are then invokable as `/nxtdev:<skill>`.
 
 For local development:
 
@@ -172,9 +178,15 @@ NxtCloud AI 에이전트 개발 워크플로우를 위한 Claude Code 플러그�
 
 ## 설치
 
-```bash
-claude plugin install nxtcloud-org/nxtdev-plugin
+Claude Code에서 실행:
+
+```text
+/plugin marketplace add nxtcloud-org/nxtdev-plugin
+/plugin install nxtdev@nxtdev
+/reload-plugins
 ```
+
+`/plugin list`로 확인 — `nxtdev`가 enabled로 표시되어야 합니다. 이후 스킬은 `/nxtdev:<skill>` 형식으로 호출할 수 있습니다.
 
 로컬 개발 시:
 
