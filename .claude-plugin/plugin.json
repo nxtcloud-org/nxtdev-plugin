@@ -7,5 +7,7 @@
         "url": "https://github.com/nxtcloud-org"
     },
     "homepage": "https://github.com/nxtcloud-org/nxtdev-plugin",
-    "repository": "https://github.com/nxtcloud-org/nxtdev-plugin"
+    "repository": "https://github.com/nxtcloud-org/nxtdev-plugin",
+    "license": "MIT",
+    "keywords": ["ai-agent", "workflow", "nxtcloud", "frontend"]
 }

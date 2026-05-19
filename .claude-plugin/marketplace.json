@@ -1,0 +1,17 @@
+{
+  "name": "nxtdev",
+  "owner": {
+    "name": "NxtCloud",
+    "email": "dev@nxtcloud.kr"
+  },
+  "description": "NxtCloud AI agent 개발 워크플로우 플러그인 카탈로그",
+  "plugins": [
+    {
+      "name": "nxtdev",
+      "source": "./",
+      "description": "NxtCloud Development Plugin for AI Agents",
+      "category": "development",
+      "keywords": ["ai-agent", "workflow", "nxtcloud", "frontend"]
+    }
+  ]
+}
