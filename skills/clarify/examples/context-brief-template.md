@@ -28,25 +28,8 @@
 ### Open Questions (if any)
 [Questions still open — unresolved but not blocking]
 
-### Complexity Assessment
-
-| Signal | Score | Reasoning |
-|--------|-------|-----------|
-| Scope breadth | ? | |
-| File impact | ? | |
-| Interface boundaries | ? | |
-| Dependency depth | ? | |
-| Risk surface | ? | |
-
-**Score:** [sum, range 5-15]
-**Verdict:** [Simple (5-8) | Complex (9-15)]
-**Rationale:** [1-2 sentences explaining the dominant complexity factor]
-
 ### Suggested Next Step
-[Auto-determined by Complexity Assessment verdict]
-- Simple: "Proceed to `/nxtdev:plan` — task fits in a single plan cycle."
-- Complex: "Proceed to `/nxtdev:masterplan` — task requires milestone decomposition."
-- Borderline: "Recommend `/nxtdev:masterplan` (score 9), but `/nxtdev:plan` is viable if [condition]. User choice needed."
+Proceed to `/nxtdev:plan`.
 ```
 
 ## Context Brief → Plan Mapping
