@@ -108,25 +108,14 @@ The Context Brief includes:
 - **Technical Context** — facts discovered through exploration
 - **Constraints** — external, technical, time/priority
 - **Success Criteria** — verifiable outcome
-- **Complexity Assessment** — 5-signal scoring (see [complexity-assessment.md](references/complexity-assessment.md))
-- **Suggested Next Step** — auto-routed by complexity score
+- **Suggested Next Step** — `/nxtdev:plan`
 
 Save the Context Brief to: `docs/context/YYYY-MM-DD-<topic>-brief.md`
 (Follow the user's preference if they specify a different location.)
 
-## Routing Rules
+## Next Step
 
-After the Context Brief is approved, the Complexity Assessment determines the next step:
-
-| Verdict | Route | Rationale |
-|---------|-------|-----------|
-| **Simple** (score 5-8) | `/nxtdev:plan` | Task fits in a single plan cycle |
-| **Complex** (score 9-15) | `/nxtdev:masterplan` | Task requires milestone decomposition |
-| **Borderline** (score 8-9) | Present both options with recommendation |
-
-**Override:** The user can always override routing.
-
-This skill **does not invoke the next skill.** It ends by presenting the Context Brief, saving it, and suggesting the routed next step.
+This skill **does not invoke the next skill.** It ends by presenting the Context Brief, saving it, and suggesting `/nxtdev:plan` as the next step.
 
 ## Red Flags
 

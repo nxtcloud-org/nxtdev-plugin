@@ -114,30 +114,15 @@ Run validation: `python ${CLAUDE_SKILL_DIR}/scripts/validate.py`
 
 Custom subagents with specialized roles, tool restrictions, and model overrides. Each agent is a `.md` file in `agents/`.
 
-## Workflows
-
-### Single-cycle (≤ 8 tasks)
+## Workflow
 
 ```
 /nxtdev:clarify  →  /nxtdev:plan  →  /nxtdev:run-plan
 ```
 
-- **`/nxtdev:clarify`** — builds a Context Brief with 5-signal complexity scoring
+- **`/nxtdev:clarify`** — builds a Context Brief
 - **`/nxtdev:plan`** — single plan document, 5 parallel reviewers, Worker-Validator tasks
 - **`/nxtdev:run-plan`** — executes the plan via compliance → worker → validator loop
-
-### Multi-day / milestone decomposition (9+ tasks)
-
-```
-/nxtdev:clarify  →  /nxtdev:masterplan  →  /nxtdev:run-masterplan
-                                              ↓ (per milestone)
-                                          /nxtdev:plan  →  /nxtdev:run-plan
-```
-
-- **`/nxtdev:masterplan`** — 5 parallel reviewer agents (feasibility, architecture, risk, dependency, user-value) synthesize a milestone DAG. Auto-appends an Integration Verification milestone.
-- **`/nxtdev:run-masterplan`** — executes the milestone DAG in topological order. Resumable (state persisted to `docs/masterplans/<slug>/state.md`). Calls `/plan` + `/run-plan` per milestone with user approval gates.
-
-`/nxtdev:clarify` auto-routes to `/plan` (Simple, score 5-8) or `/masterplan` (Complex, score 9-15) based on its complexity assessment.
 
 ## Development
 
@@ -290,28 +275,13 @@ API 상세: [api-patterns.md](references/api-patterns.md) 참조
 
 ## 워크플로우
 
-### 단일 사이클 (≤ 8 태스크)
-
 ```
 /nxtdev:clarify  →  /nxtdev:plan  →  /nxtdev:run-plan
 ```
 
-- **`/nxtdev:clarify`** — 5-signal 복잡도 점수를 포함한 Context Brief 작성
+- **`/nxtdev:clarify`** — Context Brief 작성
 - **`/nxtdev:plan`** — 단일 plan 문서, 5개 병렬 리뷰어, Worker-Validator 태스크 구조
 - **`/nxtdev:run-plan`** — compliance → worker → validator 루프로 plan 실행
-
-### 다일(multi-day) / 마일스톤 분해 (9+ 태스크)
-
-```
-/nxtdev:clarify  →  /nxtdev:masterplan  →  /nxtdev:run-masterplan
-                                                ↓ (마일스톤마다)
-                                            /nxtdev:plan  →  /nxtdev:run-plan
-```
-
-- **`/nxtdev:masterplan`** — 5개 병렬 리뷰어(feasibility, architecture, risk, dependency, user-value)가 분석하고 Synthesis Agent가 마일스톤 DAG를 합성. Integration Verification 마일스톤을 자동 추가.
-- **`/nxtdev:run-masterplan`** — 마일스톤 DAG를 topological order로 실행. 재개 가능 (`docs/masterplans/<slug>/state.md`에 상태 영속). 마일스톤마다 사용자 승인 게이트를 거쳐 `/plan` + `/run-plan` 호출.
-
-`/nxtdev:clarify`는 복잡도 평가 결과에 따라 `/plan`(Simple, 점수 5-8) 또는 `/masterplan`(Complex, 점수 9-15)로 자동 라우팅합니다.
 
 ## 개발 방법
 
