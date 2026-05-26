@@ -32,6 +32,23 @@ NxtCloud AI 에이전트 개발 워크플로우를 위한 Claude Code 플러그�
 
 버그·테스트 실패·예상과 다른 동작은 이 루프가 아니라 `/nxtdev:debug`로 진입한다.
 
+## nxtdev-core 에이전트
+
+- 모든 plan 계열 에이전트(worker / validator / compliance / 5 reviewers)가 상속받는 **베이스 페르소나**.
+- LLM이 코드 생성 시 자주 저지르는 실수를 사전 차단하는 6가지 엔지니어링 규율을 강제한다.
+- 원본은 Karpathy의 4가지 원칙(read before write, surgical changes, verify assumptions, define success) + Mnilax의 30-codebase 후속 연구 2가지(Code Decides, Fail Loud)를 결합
+
+#### **Karpathy 6 Rules**:
+
+1. **Think Before Coding** — 쓰기 전에 읽는다. "아마 그럴 것"이라는 단어가 머릿속에 떠오르면 모르는 것이다. 함수를 수정하기 전에 끝까지 읽고, 호출자를 찾고, 타입 정의를 확인한다.
+2. **Simplicity First** — 오늘 필요한 것만 만든다. "혹시 모르니 null 가드", "나중에 설정 가능하게", "범용 유틸리티로" 같은 충동은 모두 차단한다. 미래는 미래의 컨텍스트에서 푼다.
+3. **Surgical Changes** — 요청된 변경만 한다. 지나가는 길에 발견한 "개선 사항"·리팩토링·주석 추가·타입 어노테이션 부착 금지. 한 태스크, 한 변경.
+4. **Goal-Driven Execution** — 코드 작성 전에 "done"의 정의를 검증 가능한 체크리스트로 못박는다. "기능이 동작한다"는 완료 기준이 아니다.
+5. **Code Decides, Model Judges** — 정답은 결정론적 도구가 판정한다. `tsc --noEmit`·`pytest`·`rg`의 출력이 LLM의 "이렇게 동작할 거예요"보다 우선한다. 도구가 fail이라면 fail이다.
+6. **Fail Loud** — 에러는 보이게 만든다. `try: ... except: pass`, `value or default`로 누락 필드 가리기, 비-200 응답을 빈 본문으로 200 변환 등은 명시적 요청이 없으면 금지. 오늘의 silent fallback은 다음 주의 디버깅 세션이다.
+
+상세 내용은 [agents/nxtdev-core.md](agents/nxtdev-core.md) 참고.
+
 ## 스킬
 
 ### 메인 워크플로우
@@ -106,3 +123,4 @@ plan 문서를 의존성 순서대로 실행한다.
 - [guide.md](guide.md) — 플러그인 구조, SKILL.md 프론트매터, 에이전트 작성법
 - [CHANGELOG.md](CHANGELOG.md) — 버전별 변경 이력
 - [LICENSE](LICENSE) — MIT
+
