@@ -1,10 +1,8 @@
 # nxtdev
 
-A Claude Code plugin for NxtCloud AI agent development workflows.
+NxtCloud AI 에이전트 개발 워크플로우를 위한 Claude Code 플러그인.
 
-## Installation
-
-In Claude Code, run:
+## 시작하기
 
 ```text
 /plugin marketplace add nxtcloud-org/nxtdev-plugin
@@ -12,304 +10,99 @@ In Claude Code, run:
 /reload-plugins
 ```
 
-Verify with `/plugin list` — `nxtdev` should appear as enabled. Skills are then invokable as `/nxtdev:<skill>`.
-
-For local development:
-
-```bash
-claude --plugin-dir /path/to/nxtdev-plugin
-```
-
-## Plugin Structure
-
-```
-nxtdev-plugin/
-├── .claude-plugin/
-│   └── plugin.json       # Plugin manifest
-├── agents/               # Custom subagent definitions
-├── skills/               # Slash-command skills
-├── CLAUDE.md             # Claude Code instructions
-└── README.md
-```
-
-## Components
-
-### Skills
-
-User-invocable slash commands. Each skill is a directory under `skills/` containing a `SKILL.md` file with frontmatter and instructions.
-
-```bash
-# Invoke a skill
-/nxtdev:skill-name
-```
-
-#### Skill Directory Structure
-
-```
-skills/
-└── my-skill/
-    ├── SKILL.md          # Required: frontmatter + instructions (max 500 lines)
-    ├── references/       # Optional: detailed docs (loaded on-demand)
-    │   ├── api-patterns.md
-    │   └── edge-cases.md
-    ├── examples/         # Optional: sample outputs, templates
-    │   ├── sample-output.md
-    │   └── config-template.yaml
-    ├── scripts/          # Optional: executable helpers (not read, executed)
-    │   ├── validate.sh
-    │   └── deploy.py
-    └── assets/           # Optional: static resources (HTML, CSS, images)
-```
-
-| Directory | Role | Loading |
-|-----------|------|---------|
-| `references/` | API docs, patterns, edge cases | On-demand |
-| `examples/` | Code samples, expected outputs, templates | On-demand |
-| `scripts/` | Executable code (Bash, Python, Node.js) | Executed via `${CLAUDE_SKILL_DIR}/scripts/` |
-| `assets/` | Static resources (HTML, CSS, images) | Not loaded into context |
-
-SKILL.md contains core instructions (1,500-2,000 words). Detailed content goes in subdirectories and is loaded on-demand when Claude references them.
-
-#### SKILL.md Frontmatter
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `name` | string | Skill name (kebab-case, max 64 chars) |
-| `description` | string | When to use (max 250 chars) |
-| `disable-model-invocation` | boolean | Only user can invoke via `/` |
-| `user-invocable` | boolean | Set `false` to hide from `/` menu (Claude-only) |
-| `argument-hint` | string | Autocomplete hint (e.g. `"[issue-number]"`) |
-| `allowed-tools` | string\|array | Tools without per-use prompting |
-| `model` | string | Override model: `opus`, `sonnet`, `haiku` |
-| `effort` | string | Effort level: `low`, `medium`, `high`, `max` |
-| `context` | string | `fork` for isolated subagent context |
-| `agent` | string | Subagent type: `Explore`, `Plan`, `general-purpose` |
-| `paths` | string\|array | Glob patterns to auto-activate |
-| `shell` | string | `bash` or `powershell` |
-
-#### String Substitutions
-
-- `${CLAUDE_SESSION_ID}` — session ID
-- `${CLAUDE_SKILL_DIR}` — skill directory path
-- `$ARGUMENTS` / `$0`, `$1` — skill arguments
-
-#### Dynamic Content Injection
-
-Run shell commands before Claude processes the prompt:
-
-```markdown
-Current branch: !`git branch --show-current`
-```
-
-#### Supporting Files
-
-Reference subdirectory files from SKILL.md:
-
-```markdown
-For API details, see [api-patterns.md](references/api-patterns.md)
-Run validation: `python ${CLAUDE_SKILL_DIR}/scripts/validate.py`
-```
-
-### Agents
-
-Custom subagents with specialized roles, tool restrictions, and model overrides. Each agent is a `.md` file in `agents/`.
-
-## Workflow
-
-```
-/nxtdev:clarify  →  /nxtdev:plan  →  /nxtdev:run-plan
-```
-
-- **`/nxtdev:clarify`** — builds a Context Brief
-- **`/nxtdev:plan`** — single plan document, 5 parallel reviewers, Worker-Validator tasks
-- **`/nxtdev:run-plan`** — executes the plan via compliance → worker → validator loop
-
-## Development
-
-```bash
-# Test locally
-claude --plugin-dir .
-
-# Debug loading
-claude --debug
-
-# Reload after changes (in-session)
-/reload-plugins
-```
-
-### Adding a Skill
-
-1. Create `skills/my-skill/SKILL.md`
-2. Add frontmatter (`name`, `description`, etc.)
-3. Write instructions in markdown body
-4. Optionally add supporting files (`reference.md`, `scripts/`)
-5. Test with `claude --plugin-dir .` then invoke `/nxtdev:my-skill`
-
-### Adding an Agent
-
-1. Create `agents/my-agent.md`
-2. Add frontmatter (`name`, `description`, `model`, `tools`, etc.)
-3. Write system prompt in markdown body
-
-## License
-
-MIT
-
----
-
-# nxtdev (한국어)
-
-NxtCloud AI 에이전트 개발 워크플로우를 위한 Claude Code 플러그인입니다.
-
-## 설치
-
-Claude Code에서 실행:
-
-```text
-/plugin marketplace add nxtcloud-org/nxtdev-plugin
-/plugin install nxtdev@nxtdev
-/reload-plugins
-```
-
-`/plugin list`로 확인 — `nxtdev`가 enabled로 표시되어야 합니다. 이후 스킬은 `/nxtdev:<skill>` 형식으로 호출할 수 있습니다.
-
-로컬 개발 시:
-
-```bash
-claude --plugin-dir /path/to/nxtdev-plugin
-```
-
-## 플러그인 구조
-
-```
-nxtdev-plugin/
-├── .claude-plugin/
-│   └── plugin.json       # 플러그인 매니페스트
-├── agents/               # 커스텀 서브에이전트 정의
-├── skills/               # 슬래시 커맨드 스킬
-├── CLAUDE.md             # Claude Code 지침
-└── README.md
-```
-
-## 구성 요소
-
-### Skills (스킬)
-
-사용자가 슬래시 명령어로 호출하는 기능입니다. 각 스킬은 `skills/` 아래 디렉토리에 `SKILL.md` 파일을 포함합니다.
-
-```bash
-# 스킬 호출
-/nxtdev:skill-name
-```
-
-#### 스킬 디렉토리 구조
-
-```
-skills/
-└── my-skill/
-    ├── SKILL.md          # 필수: 프론트매터 + 지침 (최대 500줄)
-    ├── references/       # 선택: 상세 문서 (필요 시 로드)
-    │   ├── api-patterns.md
-    │   └── edge-cases.md
-    ├── examples/         # 선택: 샘플 출력, 템플릿
-    │   ├── sample-output.md
-    │   └── config-template.yaml
-    ├── scripts/          # 선택: 실행 가능한 헬퍼 (읽지 않고 실행)
-    │   ├── validate.sh
-    │   └── deploy.py
-    └── assets/           # 선택: 정적 리소스 (HTML, CSS, 이미지)
-```
-
-| 디렉토리 | 역할 | 로딩 방식 |
-|-----------|------|-----------|
-| `references/` | API 문서, 패턴, 엣지 케이스 | 필요 시 로드 |
-| `examples/` | 코드 샘플, 예상 출력, 템플릿 | 필요 시 로드 |
-| `scripts/` | 실행 코드 (Bash, Python, Node.js) | `${CLAUDE_SKILL_DIR}/scripts/`로 실행 |
-| `assets/` | 정적 리소스 (HTML, CSS, 이미지) | 컨텍스트에 로드되지 않음 |
-
-SKILL.md에 핵심 지침(1,500-2,000단어)을 작성하고, 상세 내용은 하위 디렉토리에 배치합니다. Claude가 참조할 때 필요 시 로드됩니다.
-
-#### SKILL.md 프론트매터
-
-| 필드 | 타입 | 설명 |
-|------|------|------|
-| `name` | string | 스킬 이름 (kebab-case, 최대 64자) |
-| `description` | string | 사용 시점 설명 (최대 250자) |
-| `disable-model-invocation` | boolean | 사용자만 `/`로 호출 가능 |
-| `user-invocable` | boolean | `false` 설정 시 `/` 메뉴에서 숨김 (Claude만 호출) |
-| `argument-hint` | string | 자동완성 힌트 (예: `"[issue-number]"`) |
-| `allowed-tools` | string\|array | 승인 없이 사용 가능한 도구 |
-| `model` | string | 모델 오버라이드: `opus`, `sonnet`, `haiku` |
-| `effort` | string | 노력 수준: `low`, `medium`, `high`, `max` |
-| `context` | string | `fork` 설정 시 격리된 서브에이전트에서 실행 |
-| `agent` | string | 서브에이전트 타입: `Explore`, `Plan`, `general-purpose` |
-| `paths` | string\|array | 자동 활성화 glob 패턴 |
-| `shell` | string | `bash` 또는 `powershell` |
-
-#### 문자열 치환
-
-- `${CLAUDE_SESSION_ID}` — 세션 ID
-- `${CLAUDE_SKILL_DIR}` — 스킬 디렉토리 경로
-- `$ARGUMENTS` / `$0`, `$1` — 스킬 인자
-
-#### 동적 콘텐츠 주입
-
-Claude가 프롬프트를 처리하기 전에 셸 명령어를 실행합니다:
-
-```markdown
-현재 브랜치: !`git branch --show-current`
-```
-
-#### 보조 파일 참조
-
-SKILL.md에서 하위 디렉토리 파일을 참조합니다:
-
-```markdown
-API 상세: [api-patterns.md](references/api-patterns.md) 참조
-검증 실행: `python ${CLAUDE_SKILL_DIR}/scripts/validate.py`
-```
-
-### Agents (에이전트)
-
-특화된 역할, 도구 제한, 모델 오버라이드가 가능한 커스텀 서브에이전트입니다. 각 에이전트는 `agents/` 디렉토리의 `.md` 파일입니다.
+상세 설치·개발 가이드는 [guide.md](guide.md) 참고.
 
 ## 워크플로우
 
 ```
-/nxtdev:clarify  →  /nxtdev:plan  →  /nxtdev:run-plan
+요구사항(모호)  →  /nxtdev:clarify  →  Context Brief
+                                          ↓
+                                     /nxtdev:plan  →  Plan 문서 (Worker-Validator 태스크)
+                                                          ↓
+                                                     /nxtdev:run-plan  →  검증된 코드 변경
 ```
 
-- **`/nxtdev:clarify`** — Context Brief 작성
-- **`/nxtdev:plan`** — 단일 plan 문서, 5개 병렬 리뷰어, Worker-Validator 태스크 구조
-- **`/nxtdev:run-plan`** — compliance → worker → validator 루프로 plan 실행
+"이거 만들고 싶어요" 수준의 모호한 요청에서 출발해 **검증된 코드 변경**까지 도달하는 3단계 파이프라인이다. 각 단계는 다음 단계의 입력이 되는 **명확한 산출물**(Context Brief → Plan 문서 → 실행된 변경사항)을 만든다.
 
-## 개발 방법
+핵심 설계 원칙:
 
-```bash
-# 로컬 테스트
-claude --plugin-dir .
+- **구현 전에 명확성 확보**: 코드를 짜기 전에 범위·제약·완료 기준을 문서로 못박는다. 중간에 "사실 그게 아니었어요"를 막는다.
+- **계획과 실행의 분리**: plan 단계에서 5명의 리뷰어가 병렬로 계획을 검토한 뒤에야 run-plan이 시작된다. 잘못된 계획으로 코드를 짜는 일을 줄인다.
+- **태스크 단위 독립 검증**: 모든 태스크는 Worker(구현) + Validator(독립 검증) 쌍으로 구성된다. Worker가 "다 됐어요"라고 해도 Validator가 통과시키지 않으면 다음 태스크로 넘어가지 않는다.
 
-# 디버그 모드
-claude --debug
+버그·테스트 실패·예상과 다른 동작은 이 루프가 아니라 `/nxtdev:debug`로 진입한다.
 
-# 변경 후 플러그인 리로드 (세션 내)
-/reload-plugins
-```
+## 스킬
 
-### 스킬 추가
+### 메인 워크플로우
 
-1. `skills/my-skill/SKILL.md` 파일 생성
-2. 프론트매터 작성 (`name`, `description` 등)
-3. 마크다운 본문에 지침 작성
-4. 필요 시 보조 파일 추가 (`reference.md`, `scripts/`)
-5. `claude --plugin-dir .`로 테스트 후 `/nxtdev:my-skill`로 호출
+#### `/nxtdev:clarify`
 
-### 에이전트 추가
+모호한 요구사항을 정제해 **Context Brief**를 작성한다.
 
-1. `agents/my-agent.md` 파일 생성
-2. 프론트매터 작성 (`name`, `description`, `model`, `tools` 등)
-3. 마크다운 본문에 시스템 프롬프트 작성
+- **입력**: 자연어 요청 (예: "결제 페이지에 쿠폰 적용 기능 추가")
+- **과정**: Q&A 반복 + 병렬 코드베이스 탐색. 관련 파일·기존 패턴·잠재적 충돌 지점을 미리 식별한다.
+- **출력**: `context-brief.md` — 범위, 제약 조건, 완료 기준(Definition of Done), 영향받는 파일 목록
+- **언제 쓰나**: 요청이 한 문장으로 끝나거나 "X 기능 추가"처럼 범위가 흐릿할 때. 이미 PRD나 상세 명세가 있다면 건너뛰고 `plan`으로 바로 가도 된다.
 
-## 라이선스
+#### `/nxtdev:plan`
 
-MIT
+Context Brief를 **실행 가능한 plan 문서**로 변환한다.
+
+- **입력**: Context Brief 경로
+- **과정**: 단일 plan 문서를 초안 → 5명의 병렬 리뷰어가 동시에 검토
+  - `spec` — 스펙 준수 여부
+  - `placeholder` — 미해결 가정·TODO·placeholder 식별
+  - `types` — 타입 정의·계약 일관성
+  - `deps` — 의존성 순서·누락된 사전 조건
+  - `verification` — 검증 가능성·완료 기준 명확성
+- **출력**: `plan.md` — Worker-Validator 쌍으로 분해된 태스크 목록
+- **특징**: 모든 태스크는 "구현자(worker)가 할 일"과 "검증자(validator)가 통과시킬 조건"이 함께 정의된다.
+
+#### `/nxtdev:run-plan`
+
+plan 문서를 의존성 순서대로 실행한다.
+
+- **입력**: plan 문서 경로
+- **과정**: 각 태스크마다 3단계 루프
+  1. **compliance** — 태스크가 plan의 제약·규칙을 따르는지 사전 검증
+  2. **worker** — 구현 (독립 태스크는 병렬 디스패치 가능)
+  3. **validator** — Worker와 분리된 컨텍스트에서 독립 검증. 통과 못하면 worker로 되돌림.
+- **출력**: 실행된 코드 변경 + 태스크별 검증 결과 로그
+- **특징**: validator는 worker가 "됐다"고 한 말을 믿지 않고 직접 확인한다. "테스트는 안 돌려봤지만 될 거예요" 패턴을 차단.
+
+### 디버그
+
+#### `/nxtdev:debug`
+
+7-phase 디버그 워크플로우. 무계획 디버깅을 방지한다.
+
+1. **재현** — 안정적으로 재현 가능한 최소 케이스 확보
+2. **격리** — 변수 좁히기 (어디까지가 정상, 어디부터가 비정상인가)
+3. **가설** — 근본 원인 후보 나열
+4. **failing test 잠금** — 버그를 드러내는 테스트를 먼저 작성·실패 확인
+5. **단일 수정** — 한 가지 변경만 적용
+6. **검증** — failing test 통과 + 기존 테스트 회귀 없음
+7. **회고** — 왜 놓쳤는지·재발 방지 방법
+
+산탄총 수정("일단 이것저것 고쳐보자") 대신 가설 검증 사이클을 강제한다.
+
+### 프로젝트 셋업
+
+#### `/nxtdev:init`
+
+프론트엔드 프로젝트 초기 룰셋 세팅.
+
+- **모드**:
+  - `nextjs` — Next.js 프로젝트 룰셋
+  - `vite` — Vite 프로젝트 룰셋
+  - `design` — NxtCloud 디자인 시스템 룰셋 단독 적용
+  - 인자 없이 호출하면 프로젝트를 감지하거나 선택지를 띄운다
+- **출력**: `.claude/rules/` 아래 규칙 파일 + 필요 시 디자인 시스템 참조
+- **특징**: `package.json`이 없는 빈 디렉토리에서도 동작한다. 룰셋을 먼저 세팅한 뒤 Claude에게 프로젝트 골격 생성을 맡기는 워크플로우를 지원한다.
+
+## 문서
+
+- [guide.md](guide.md) — 플러그인 구조, SKILL.md 프론트매터, 에이전트 작성법
+- [CHANGELOG.md](CHANGELOG.md) — 버전별 변경 이력
+- [LICENSE](LICENSE) — MIT
