@@ -34,15 +34,15 @@ NxtCloud AI 에이전트 개발 워크플로우를 위한 Claude Code 플러그�
 ## 워크플로우
 
 ```
-┏━━━━━━━━━━━━ nxtdev-core 에이전트 (Karpathy 6 Rules — 모든 단계의 베이스) ━━━━━━━━━━━━━┓
-┃                                                                                ┃
-┃   요구사항(모호)  →  /nxtdev:clarify  →  Context Brief                            ┃
-┃                                             ↓                                  ┃
-┃                                        /nxtdev:plan  →  Plan 문서               ┃
-┃                                                             ↓                  ┃
-┃                                        /nxtdev:run-plan  →  검증된 코드 변경       ┃
-┃                                                                                ┃
-┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+━━━━━━━━━ nxtdev-core 에이전트 (Karpathy 6 Rules — 모든 단계의 베이스) ━━━━━━━━━━━━━━━━
+
+   요구사항(모호)  →  /nxtdev:clarify  →  Context Brief
+                                             ↓
+                                        /nxtdev:plan  →  Plan 문서
+                                                            ↓
+                                        /nxtdev:run-plan  →  검증된 코드 변경
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 "이거 만들고 싶어요" 수준의 모호한 요청에서 출발해 **검증된 코드 변경**까지 도달하는 3단계 파이프라인이다. 각 단계는 다음 단계의 입력이 되는 **명확한 산출물**(Context Brief → Plan 문서 → 실행된 변경사항)을 만든다.
@@ -129,4 +129,3 @@ plan 문서를 의존성 순서대로 실행한다.
 - [guide.md](guide.md) — 플러그인 구조, SKILL.md 프론트매터, 에이전트 작성법
 - [CHANGELOG.md](CHANGELOG.md) — 버전별 변경 이력
 - [LICENSE](LICENSE) — MIT
-
