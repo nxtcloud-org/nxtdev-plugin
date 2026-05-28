@@ -43,7 +43,7 @@ vi.mock('next/navigation', () => ({
 }));
 ```
 
-## Middleware 테스트
+## Proxy 테스트 (구 Middleware, Next 16+)
 
-- NextRequest + middleware 함수 직접 호출 → NextResponse 검증
+- NextRequest + proxy 함수 직접 호출 → NextResponse 검증
 - matcher 패턴별 요청 시나리오 테스트
