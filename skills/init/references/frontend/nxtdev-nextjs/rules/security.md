@@ -38,8 +38,8 @@ export async function getData() {
 
 ## 인증
 
-- middleware.ts: 인증 필요 경로 보호 (Edge Runtime)
-- 클라이언트에서만 권한 체크 금지 (미들웨어 + 서버 검증 필수)
+- proxy.ts: 인증 필요 경로 보호 (Next 16+, 기본 Node.js Runtime)
+- 클라이언트에서만 권한 체크 금지 (proxy + 서버 검증 필수)
 
 ## Server Actions 보안
 
@@ -47,18 +47,19 @@ export async function getData() {
 - Zod로 입력값 서버에서 반드시 재검증 (클라이언트 검증과 별도)
 - POST 메서드만 지원, Origin 헤더 자동 검증 (CSRF 방지)
 - allowedOrigins: next.config.ts에서 프록시 도메인 허용
+- Server Action은 proxy matcher와 별개로 인증/인가 직접 검증 (matcher 제외 경로의 Server Action은 proxy를 우회)
 
-## Middleware 상세
+## Proxy 상세 (구 Middleware, Next 16+)
 
 - 인증/권한 확인, 리디렉션에 사용
-- Edge Runtime만 지원 (Node.js API 사용 불가)
+- Node.js Runtime 기본 (Next 16+). runtime config 옵션은 에러 발생
 - 무거운 작업 금지 (복잡한 DB 쿼리, 대량 계산)
 
 ```ts
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // 인증 체크
@@ -81,7 +82,7 @@ export const config = {
 };
 ```
 
-### Middleware 사용 사례
+### Proxy 사용 사례
 
 - 인증/권한: 토큰 확인 → 미인증 시 로그인 리다이렉트
 - 경로 리다이렉트: 이전 URL → 새 URL
