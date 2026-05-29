@@ -69,9 +69,8 @@ mkdir -p src/{components,features,hooks,lib,utils,types,stores,contexts,constant
 mkdir -p src/{i18n,config}
 
 # 5. 선택적 루트 파일 (필요 시)
-# touch middleware.ts            ← 인증/리다이렉트
+# touch proxy.ts                 ← 인증/리다이렉트 (구 middleware.ts, Next 16+)
 # touch instrumentation.ts      ← OpenTelemetry/모니터링
-# touch proxy.ts                ← 요청 프록시
 # touch .env.development        ← 개발 환경 변수
 # touch .env.production         ← 프로덕션 환경 변수
 ```
