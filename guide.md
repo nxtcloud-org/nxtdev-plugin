@@ -14,6 +14,26 @@ In Claude Code, run:
 
 Verify with `/plugin list` — `nxtdev` should appear as enabled. Skills are then invokable as `/nxtdev:<skill>`.
 
+> **Prerequisite (internal team)**
+> This repo is **private**. Installing requires access to `nxtcloud-org/nxtdev-plugin` and a working GitHub auth setup.
+
+> **Troubleshooting — install fails with `git@github.com: Permission denied (publickey)`**
+> The installer clones the repo over SSH, but this machine has no GitHub SSH key registered. Fix with either:
+>
+> **Option A (recommended, no key needed)** — if you're already logged in via `gh`, rewrite SSH clones to HTTPS:
+> ```bash
+> git config --global url."https://github.com/".insteadOf "git@github.com:"
+> ```
+> Verify: `git ls-remote git@github.com:nxtcloud-org/nxtdev-plugin.git v1.0.1` → prints a tag hash. Then retry `/plugin install`.
+> Revert: `git config --global --unset url."https://github.com/".insteadof`
+>
+> **Option B** — register a GitHub SSH key:
+> ```bash
+> ssh-keygen -t ed25519 -C "you@nxtcloud.kr"
+> gh ssh-key add ~/.ssh/id_ed25519.pub --title "$(hostname)"
+> ssh -T git@github.com   # success prints "Hi <user>!"
+> ```
+
 For local development:
 
 ```bash
@@ -172,6 +192,26 @@ Claude Code에서 실행:
 ```
 
 `/plugin list`로 확인 — `nxtdev`가 enabled로 표시되어야 합니다. 이후 스킬은 `/nxtdev:<skill>` 형식으로 호출할 수 있습니다.
+
+> **사전 조건 (사내 팀원)**
+> 이 레포는 **비공개**입니다. 설치하려면 `nxtcloud-org/nxtdev-plugin` 레포 접근 권한과 GitHub 인증 설정이 필요합니다.
+
+> **문제 해결 — `git@github.com: Permission denied (publickey)`로 설치 실패 시**
+> 플러그인 설치기가 SSH로 레포를 클론하는데, 해당 머신에 GitHub SSH 키가 등록돼 있지 않아 생기는 오류입니다. 둘 중 하나로 해결:
+>
+> **방법 A (권장 · 키 생성 불필요)** — 이미 `gh`로 로그인돼 있으면, SSH 클론을 HTTPS로 자동 변환:
+> ```bash
+> git config --global url."https://github.com/".insteadOf "git@github.com:"
+> ```
+> 검증: `git ls-remote git@github.com:nxtcloud-org/nxtdev-plugin.git v1.0.1` → 태그 해시가 나오면 OK. 이후 `/plugin install` 재시도.
+> 되돌리기: `git config --global --unset url."https://github.com/".insteadof`
+>
+> **방법 B** — GitHub SSH 키 등록:
+> ```bash
+> ssh-keygen -t ed25519 -C "you@nxtcloud.kr"
+> gh ssh-key add ~/.ssh/id_ed25519.pub --title "$(hostname)"
+> ssh -T git@github.com   # "Hi <user>!" 나오면 성공
+> ```
 
 로컬 개발 시:
 
