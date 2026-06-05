@@ -9,8 +9,8 @@
     {
       "name": "nxtdev",
       "source": {
-        "source": "github",
-        "repo": "nxtcloud-org/nxtdev-plugin",
+        "source": "url",
+        "url": "https://github.com/nxtcloud-org/nxtdev-plugin.git",
         "ref": "v1.0.1"
       },
       "version": "1.0.1",
