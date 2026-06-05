@@ -171,6 +171,18 @@ claude --debug
 2. Add frontmatter (`name`, `description`, `model`, `tools`, etc.)
 3. Write system prompt in markdown body
 
+## Release Strategy
+
+- **Branching**: GitHub Flow. Protect `main`; do work on short-lived `<type>/<topic>` branches (`feat/*`, `fix/*`, `docs/*`, `chore/*`, `refactor/*`), merge via PR, then delete the branch.
+- **Versioning**: [SemVer](https://semver.org) `vMAJOR.MINOR.PATCH`. Tags are placed on `main` HEAD.
+- **When to release**: bump the version only when functional changes (skills/agents) have accumulated. Docs-only changes are not re-released — they ride along with the next functional release.
+- **Release steps**:
+  1. Update `version` in `plugin.json` and `marketplace.json`
+  2. Update `CHANGELOG.md` (Keep a Changelog format)
+  3. `git tag vX.Y.Z` on `main` HEAD
+  4. Update `ref` in `marketplace.json` to the new tag
+- **Distribution**: `marketplace.json`'s `ref` always points to the latest **stable tag**. Marketplace installs are based on this tag.
+
 ## License
 
 MIT
@@ -349,6 +361,18 @@ claude --debug
 1. `agents/my-agent.md` 파일 생성
 2. 프론트매터 작성 (`name`, `description`, `model`, `tools` 등)
 3. 마크다운 본문에 시스템 프롬프트 작성
+
+## 릴리스 전략
+
+- **브랜치**: GitHub Flow. `main`을 보호하고, 작업은 `<type>/<주제>` 단기 브랜치(`feat/*`, `fix/*`, `docs/*`, `chore/*`, `refactor/*`)에서 진행한 뒤 PR로 머지하고 브랜치는 삭제한다.
+- **버전**: [SemVer](https://semver.org) `vMAJOR.MINOR.PATCH`. 태그는 `main` HEAD에 부여한다.
+- **릴리스 시점**: 스킬·에이전트 등 기능 변경이 쌓였을 때만 버전을 올린다. docs-only 변경은 재릴리스하지 않는다(다음 기능 릴리스에 함께 포함).
+- **릴리스 절차**:
+  1. `plugin.json`·`marketplace.json`의 `version` 갱신
+  2. `CHANGELOG.md` 업데이트 (Keep a Changelog 형식)
+  3. `git tag vX.Y.Z` (main HEAD)
+  4. `marketplace.json`의 `ref`를 새 태그로 갱신
+- **배포**: `marketplace.json`의 `ref`는 항상 최신 **안정 태그**를 가리킨다. 마켓플레이스 설치는 이 태그 기준으로 이뤄진다.
 
 ## 라이선스
 
