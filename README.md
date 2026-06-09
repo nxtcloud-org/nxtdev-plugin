@@ -4,13 +4,20 @@ NxtCloud AI 에이전트 개발 워크플로우를 위한 Claude Code 플러그�
 
 ## 시작하기
 
+GitHub SSH 키가 없으면, HTTPS 클론을 1회 활성화 후 진행 (SSH 키 있으면 생략):
+
+```bash
+# 셸 profile에 추가 후 터미널/Claude Code 재시작
+export CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1
+```
+
 ```text
 /plugin marketplace add nxtcloud-org/nxtdev-plugin
 /plugin install nxtdev@nxtdev
 /reload-plugins
 ```
 
-상세 설치·개발 가이드는 [guide.md](guide.md) 참고.
+상세 설치·문제 해결은 [guide.md](guide.md) 참고.
 
 ## nxtdev-core 에이전트
 

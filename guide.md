@@ -4,7 +4,14 @@ A Claude Code plugin for NxtCloud AI agent development workflows.
 
 ## Installation
 
-In Claude Code, run:
+The plugin installer clones over SSH by default. If you don't have a GitHub SSH key registered, enable HTTPS cloning once (the repo is public, so no credentials are needed):
+
+```bash
+# add to your shell profile (~/.zshrc, ~/.bashrc), then restart the terminal / Claude Code
+export CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1
+```
+
+Then, in Claude Code:
 
 ```text
 /plugin marketplace add nxtcloud-org/nxtdev-plugin
@@ -13,6 +20,8 @@ In Claude Code, run:
 ```
 
 Verify with `/plugin list` — `nxtdev` should appear as enabled. Skills are then invokable as `/nxtdev:<skill>`.
+
+> If you already have a GitHub SSH key registered, the env var is optional — SSH cloning works as-is. `CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1` only affects Claude Code plugin clones, not your regular git operations.
 
 For local development:
 
@@ -175,7 +184,14 @@ NxtCloud AI 에이전트 개발 워크플로우를 위한 Claude Code 플러그�
 
 ## 설치
 
-Claude Code에서 실행:
+플러그인 설치기는 기본적으로 SSH로 클론합니다. GitHub SSH 키가 등록돼 있지 않다면, HTTPS 클론을 1회 활성화하세요 (레포가 public이라 자격증명은 불필요):
+
+```bash
+# 셸 profile(~/.zshrc, ~/.bashrc)에 추가 후 터미널 / Claude Code 재시작
+export CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1
+```
+
+그다음 Claude Code에서:
 
 ```text
 /plugin marketplace add nxtcloud-org/nxtdev-plugin
@@ -184,6 +200,8 @@ Claude Code에서 실행:
 ```
 
 `/plugin list`로 확인 — `nxtdev`가 enabled로 표시되어야 합니다. 이후 스킬은 `/nxtdev:<skill>` 형식으로 호출할 수 있습니다.
+
+> GitHub SSH 키가 이미 등록돼 있으면 env var는 선택 사항입니다(SSH 클론 그대로 동작). `CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1`은 Claude Code 플러그인 클론에만 영향을 주며, 일반 git 작업엔 영향이 없습니다.
 
 로컬 개발 시:
 
