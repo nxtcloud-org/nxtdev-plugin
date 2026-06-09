@@ -4,6 +4,11 @@ All notable changes to the **nxtdev** plugin are documented in this file.
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: [SemVer](https://semver.org/spec/v2.0.0.html)
 
+## [Unreleased]
+
+### Removed
+- `/nxtdev:init` 스킬 제거. 프론트엔드 룰셋·디자인 시스템은 별도 저장소(`nxtdev-rules`)에서 관리한다. 플러그인은 워크플로우(clarify/plan/run-plan/debug)에 집중한다.
+
 ## [1.0.1] - 2026-05-29
 
 ### Fixed
