@@ -11,9 +11,9 @@
       "source": {
         "source": "github",
         "repo": "nxtcloud-org/nxtdev-plugin",
-        "ref": "v1.0.1"
+        "ref": "v2.0.0"
       },
-      "version": "1.0.1",
+      "version": "2.0.0",
       "description": "NxtCloud Development Plugin for AI Agents",
       "category": "development",
       "keywords": ["ai-agent", "workflow", "nxtcloud", "frontend"]

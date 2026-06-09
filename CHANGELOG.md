@@ -4,10 +4,13 @@ All notable changes to the **nxtdev** plugin are documented in this file.
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: [SemVer](https://semver.org/spec/v2.0.0.html)
 
-## [Unreleased]
+## [2.0.0] - 2026-06-09
 
 ### Removed
-- `/nxtdev:init` 스킬 제거. 프론트엔드 룰셋·디자인 시스템은 별도 저장소(`nxtdev-rules`)에서 관리한다. 플러그인은 워크플로우(clarify/plan/run-plan/debug)에 집중한다.
+- **(BREAKING)** `/nxtdev:init` 스킬 제거. 프론트엔드 룰셋·디자인 시스템은 별도 저장소(`nxtdev-rules`)에서 관리한다. 플러그인은 워크플로우(clarify/plan/run-plan/debug)에 집중한다.
+
+### Changed
+- 레포 public 전환에 맞춰 설치 안내 단순화 (private/SSH 사전 세팅 제거)
 
 ## [1.0.1] - 2026-05-29
 
@@ -37,5 +40,6 @@ First public release.
 - Self-hosted marketplace via `.claude-plugin/marketplace.json`
 - MIT license
 
+[2.0.0]: https://github.com/nxtcloud-org/nxtdev-plugin/releases/tag/v2.0.0
 [1.0.1]: https://github.com/nxtcloud-org/nxtdev-plugin/releases/tag/v1.0.1
 [1.0.0]: https://github.com/nxtcloud-org/nxtdev-plugin/releases/tag/v1.0.0
