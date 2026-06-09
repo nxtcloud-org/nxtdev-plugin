@@ -7,11 +7,11 @@ A Claude Code plugin for NxtCloud AI agent development workflows.
 The plugin installer clones over SSH by default. If you don't have a GitHub SSH key registered, enable HTTPS cloning once (the repo is public, so no credentials are needed):
 
 ```bash
-# add to your shell profile (~/.zshrc, ~/.bashrc), then restart the terminal / Claude Code
-export CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1
+# add it permanently to your shell profile
+echo 'export CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1' >> ~/.zshrc
 ```
 
-Then, in Claude Code:
+Open a **new terminal and relaunch Claude Code** so it picks up the env var (it is read at process startup). Then:
 
 ```text
 /plugin marketplace add nxtcloud-org/nxtdev-plugin
@@ -187,11 +187,11 @@ NxtCloud AI 에이전트 개발 워크플로우를 위한 Claude Code 플러그�
 플러그인 설치기는 기본적으로 SSH로 클론합니다. GitHub SSH 키가 등록돼 있지 않다면, HTTPS 클론을 1회 활성화하세요 (레포가 public이라 자격증명은 불필요):
 
 ```bash
-# 셸 profile(~/.zshrc, ~/.bashrc)에 추가 후 터미널 / Claude Code 재시작
-export CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1
+# 셸 profile에 영구 추가
+echo 'export CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1' >> ~/.zshrc
 ```
 
-그다음 Claude Code에서:
+추가 후 **새 터미널을 열어 Claude Code를 다시 실행**해야 적용됩니다 (env var는 프로세스 시작 시점에 읽힘). 그다음 Claude Code에서:
 
 ```text
 /plugin marketplace add nxtcloud-org/nxtdev-plugin
