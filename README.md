@@ -23,9 +23,9 @@ export CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1
 
 > **이 플러그인의 모든 스킬·에이전트는 `nxtdev-core`를 베이스로 그 위에서 돌아간다.** 워크플로우의 어떤 단계에 있든 6가지 엔지니어링 규율이 먼저 적용된다.
 
-- 모든 plan 계열 에이전트(worker / validator / compliance / 5 reviewers)가 상속받는 **베이스 페르소나**.
-- LLM이 코드 생성 시 자주 저지르는 실수를 사전 차단하는 6가지 엔지니어링 규율을 강제한다.
-- 원본은 Karpathy의 4가지 원칙(read before write, surgical changes, verify assumptions, define success) + Mnilax의 30-codebase 후속 연구 2가지(Code Decides, Fail Loud)를 결합
+- LLM이 코드 생성 시 자주 저지르는 실수를 사전 차단하는 6가지 엔지니어링 규율을 강제하는 **베이스 페르소나**.
+- 원본은 Karpathy의 4가지 원칙(read before write, surgical changes, verify assumptions, define success) + Mnilax의 30-codebase 후속 연구 2가지(Code Decides, Fail Loud)를 결합.
+- **적용 범위 주의**: `nxtdev-core` 프롬프트는 메인 세션에만 적용되며, 하위 에이전트(서브에이전트)에는 자동으로 상속되지 않는다. 이 때문에 worker 등 실제 구현을 담당하는 하위 에이전트에는 동일한 규율(Karpathy Rules)을 각 정의 파일에 별도로 명시.
 
 #### **Karpathy 6 Rules**:
 
