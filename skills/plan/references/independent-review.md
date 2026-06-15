@@ -1,12 +1,13 @@
 # Independent Review: 5 Parallel Reviewers
 
-Plan review is performed by 5 independent reviewer agents dispatched in parallel. Each reviewer checks one dimension of plan quality from an isolated context.
+Plan review is performed by 5 independent reviewer agents running in parallel via the plan-review Workflow (`workflows/plan-review.js`). Each reviewer checks one dimension of plan quality from an isolated context.
 
 ## Why Parallel Reviewers
 
 - **Confirmation bias prevention** — the agent that wrote the plan will overlook its own gaps. Independent reviewers in fresh contexts catch what the author cannot.
 - **Speed** — 5 checks run simultaneously (~45s) instead of sequentially (~3min).
-- **Context isolation** — each reviewer sees only the plan, not the author's reasoning. Agent tool starts each reviewer in a fresh context window.
+- **Context isolation** — each reviewer sees only the plan, not the author's reasoning. The Workflow runs each reviewer (`agentType: "nxtdev:plan-review-*"`) in a fresh context window.
+- **Determinism** — the Workflow script forces all 5 reviewers to run and synthesizes FAIL findings in code, instead of relying on the author to remember to dispatch them.
 
 ## The 5 Reviewers
 
@@ -68,10 +69,17 @@ Checks the entire verification chain:
 
 ## Synthesis
 
-After all 5 reviewers return:
+The Workflow returns a result object:
 
-1. Collect all FAIL verdicts
-2. Fix every issue inline in the plan
-3. If fixes were significant, re-dispatch only the affected reviewers to verify
+- `overallVerdict`: `"PASS"` | `"FAIL"`
+- `failedReviewers`: keys of reviewers that returned FAIL
+- `synthesis`: per-reviewer correction directive (only present when FAIL)
+- `perReviewer`: full findings from each reviewer
+
+Act on it:
+
+1. If `overallVerdict === "PASS"` → plan is ready for execution.
+2. If `"FAIL"` → apply every fix in `synthesis` to the plan inline.
+3. After significant fixes, re-run only the reviewers in `failedReviewers` to verify.
 
 A plan is ready for execution only when all 5 reviewers report PASS.

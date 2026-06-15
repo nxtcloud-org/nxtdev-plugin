@@ -19,6 +19,7 @@ A plan document must be executable by a worker with zero codebase context, witho
 3. **Task conflicts must be prevented.** Tasks modifying the same file must not run in parallel. Tasks with dependencies must wait for predecessor completion.
 4. **Self-Review is mandatory.** After writing the plan, verify its completeness yourself.
 5. **Tasks decompose to minimal feature units.** One task produces one clear deliverable.
+6. **Independent review is mandatory.** After finishing the plan, you **must** run the plan-review Workflow (`Workflow({ name: "nxtdev:plan-review", args })`). Self-Review (Gate 4) does NOT substitute for it — the plan's author cannot catch their own confirmation bias. **Never skip it regardless of plan size.** "The task is small" / "the scope is clear" / "to save tokens" are NOT valid reasons to skip. Only when the Workflow tool is unavailable, fall back to dispatching the 5 reviewers via parallel `Agent` calls.
 
 ## When To Use
 
@@ -157,27 +158,27 @@ Every step must contain the actual content a worker needs. These are **plan fail
 
 ## Independent Review (5 Parallel Reviewers)
 
-After writing the complete plan, dispatch **5 reviewer agents in parallel** — one `Agent` call per reviewer, all in a single message. Each reviewer independently judges one dimension of plan quality.
+**This step is Hard Gate 6 — once a plan is written, it cannot be skipped regardless of size.**
 
-**Dispatch all 5 concurrently:**
+After writing the complete plan, run the plan-review Workflow. It dispatches 5 independent reviewer agents in parallel — one per dimension — and synthesizes FAIL findings into a correction directive.
 
-```
-Agent({ description: "Review spec coverage",   prompt: "[plan path]", subagent_type: "plan-review-spec" })
-Agent({ description: "Scan for placeholders",   prompt: "[plan path]", subagent_type: "plan-review-placeholder" })
-Agent({ description: "Check type consistency",   prompt: "[plan path]", subagent_type: "plan-review-types" })
-Agent({ description: "Verify dependencies",      prompt: "[plan path]", subagent_type: "plan-review-deps" })
-Agent({ description: "Check verification coverage", prompt: "[plan path]", subagent_type: "plan-review-verification" })
+**실행:**
+
+```javascript
+Workflow({ name: "nxtdev:plan-review", args: "[plan path]" })
 ```
 
-Each reviewer's prompt must include the full plan file path so it can read the plan independently. Reviewers do not see each other's findings (Agent tool provides context isolation automatically).
+**결과 해석:**
 
-**After all 5 return, synthesize:**
+- `overallVerdict: "PASS"` → 계획 즉시 실행 가능.
+- `overallVerdict: "FAIL"` → `synthesis`에 리뷰어별 수정 지시문 있음. 수정 후 `failedReviewers` 목록의 리뷰어만 재실행:
 
-1. Collect all FAIL verdicts and their specific findings
-2. Fix every issue found — add missing tasks, replace placeholders, correct names, fix dependency chains, add verification
-3. If any reviewer reported FAIL, the plan is not ready. Fix and re-check (or re-dispatch only the failed reviewers)
+```javascript
+// FAIL 리뷰어만 재실행 예시
+Agent({ description: "Re-review spec", prompt: "[plan path]", subagent_type: "nxtdev:plan-review-spec" })
+```
 
-**Do NOT skip the parallel review.** Inline review by the plan author suffers from confirmation bias. Independent reviewers in isolated contexts catch what the author cannot.
+**Do NOT skip the review.** Inline review by the plan author suffers from confirmation bias. Independent reviewers in isolated contexts catch what the author cannot.
 
 See [independent-review.md](references/independent-review.md) for what each reviewer checks in detail.
 
