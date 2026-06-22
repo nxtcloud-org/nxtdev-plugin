@@ -105,4 +105,4 @@ Expected: No regressions — all pre-existing tests still pass
 | Technical Context | Architecture + Tech Stack + File Structure basis |
 | Constraints | Task decomposition constraints |
 | Success Criteria | Self-Review criteria + Final Verification |
-| Open Questions | Assumptions in plan, confirmed by user |
+| Open Questions | Assumptions in plan (confirmed at the gate before handoff) |
