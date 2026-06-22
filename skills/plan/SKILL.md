@@ -1,228 +1,67 @@
 ---
 name: plan
-description: "명확한 작업 범위를 실행 가능한 계획 문서로 변환. Context Brief를 받아 Worker-Validator 구조의 태스크로 분해한다."
+description: "Context Brief를 점검하고 plan 워크플로우(작성→검토→수정 루프)를 발동하는 문지기. plan을 직접 쓰지 않는다."
 argument-hint: "[context-brief-path]"
 ---
 
-# Plan Crafting
+<!-- ===================================================================
+SKELETON v3 — 문지기. 작성 규칙은 plan-author.md, 검토 강제는 plan.js가 정본.
+이 파일은 (1)게이트 점검 (2)워크플로우 발동 (3)결과 안내만 한다.
+==================================================================== -->
 
-Writes an executable plan document from a clearly defined work scope. Designed so tasks can be spawned as worker-validator pairs in parallel.
+# Plan (문지기)
 
-## Core Principle
-
-A plan document must be executable by a worker with zero codebase context, without any additional questions. All ambiguity must be resolved at the planning stage.
-
-## Hard Gates
-
-1. **Context Brief 없으면 먼저 물어본다.** Context Brief 파일이 없고 사용자 요청에 goal, scope boundary, success criteria 중 하나라도 빠져 있으면, **코드 탐색이나 계획 작성 전에 반드시 `AskUserQuestion`으로 선택지를 제시**한다. 탐색부터 시작하지 않는다.
-2. **Every step must be executable.** Placeholders (TBD, TODO, "implement later") are never allowed.
-3. **Task conflicts must be prevented.** Tasks modifying the same file must not run in parallel. Tasks with dependencies must wait for predecessor completion.
-4. **Self-Review is mandatory.** After writing the plan, verify its completeness yourself.
-5. **Tasks decompose to minimal feature units.** One task produces one clear deliverable.
-6. **Independent review is mandatory.** After finishing the plan, you **must** run the plan-review Workflow (`Workflow({ name: "nxtdev:plan-review", args })`). Self-Review (Gate 4) does NOT substitute for it — the plan's author cannot catch their own confirmation bias. **Never skip it regardless of plan size.** "The task is small" / "the scope is clear" / "to save tokens" are NOT valid reasons to skip. Only when the Workflow tool is unavailable, fall back to dispatching the 5 reviewers via parallel `Agent` calls.
+이 스킬은 plan을 직접 작성하지 않는다. Context Brief를 점검하고 plan 워크플로우
+(헤드리스 자동 루프: 작성→검토→수정)를 발동한 뒤, 결과를 사용자에게 안내한다.
 
 ## When To Use
 
-- After `/nxtdev:clarify` completes and a Context Brief file has been generated
-- When the user explicitly requests plan creation with a clear prompt
-- When multi-step implementation is needed and task ordering with dependencies must be defined
+- `/nxtdev:clarify`가 끝나 Context Brief 파일이 생성된 뒤
+- 사용자가 명확한 요청으로 plan 작성을 직접 요청할 때
+- 다단계 구현 + 의존성 있는 태스크 순서 정의가 필요할 때
 
 ## When NOT To Use
 
-- When work scope is still ambiguous (return to `/nxtdev:clarify`)
-- Single-file edits, simple bug fixes, or other single-step tasks
-- When the user explicitly says "skip the plan, just do it"
+- 작업 스코프가 아직 모호할 때 (→ `/nxtdev:clarify`로)
+- 단일 파일 편집, 단순 버그 수정 등 한 단계 작업
+- 사용자가 "plan 생략하고 바로 해"라고 할 때
 
-## Input
+## 게이트 (사용자 개입은 여기까지)
 
-This skill takes a **Context Brief file** as input. If `$ARGUMENTS` is provided, read it as the Context Brief path.
+[G] **데이터 인계의 시작점.** 게이트가 확정한 내용은 반드시 Context Brief **파일에**
+기록되어야 한다 — 워크플로우는 파일 경로만 받고, 헤드리스 작성자는 그 파일만 읽는다.
 
-**If no Context Brief is provided**, check whether the user's request contains all three: explicit goal, scope boundary (in/out), and success criteria.
+1. **Context Brief 읽기** (`$ARGUMENTS`).
+2. **점검**: goal / scope(in·out) / success criteria 중 누락이 있는가?
+   - 가벼운 누락(필드·간단한 확인) → `AskUserQuestion`으로 보강
+     → **★ 보강한 답을 Context Brief 파일에 `Write`로 반영** ([G] 인계 필수)
+   - 코드 조사가 필요한 근본 모호 → `/nxtdev:clarify` 권유(강제 회부 안 함)
+3. **절대 사용자 확인 없이 스코프를 자체 결정하지 않는다.**
+4. 완전한 Context Brief 도달 → 발동.
 
-- **All three present** → proceed directly
-- **Any missing** → use `AskUserQuestion` to present the choice:
+<!-- 점검 기준은 게이트 1(Context Brief 완전성)뿐이다. 작성 규칙(옛 Hard Gate 2~5)은
+     plan-author가, 검토 강제(옛 Hard Gate 6)는 plan.js가 책임진다. 여기서 중복 점검하지 않는다. -->
 
-```
-Context Brief가 없습니다. 어떻게 진행할까요?
-
-1. `/nxtdev:clarify` 먼저 (추천) — 요구사항을 구체화한 뒤 다시 plan을 실행
-2. 바로 plan 작성 — 필수 정보만 빠르게 확인하고 plan 작성 진행
-```
-
-Option 1 선택 시 (기본 추천): 스킬을 종료하고 `/nxtdev:clarify` 실행을 안내합니다. clarify가 코드베이스 탐색 + 반복 Q&A로 스코프를 확정하므로 계획 품질이 높아집니다.
-Option 2 선택 시: goal, scope boundary (in/out), success criteria를 `AskUserQuestion`으로 하나씩 확인한 뒤 진행합니다. 이 경우에도 Technical Context는 `Agent` with `subagent_type: "Explore"`로 코드베이스를 탐색하여 보충합니다.
-
-**절대로 사용자 확인 없이 스코프를 자체 결정하지 마십시오.**
-
-| Context Brief Field | Plan Header Mapping |
-|---|---|
-| Goal | **Goal** |
-| Scope (In/Out) | **Work Scope** (included/excluded) |
-| Technical Context | **Architecture** + **Tech Stack** + basis for file structure mapping |
-| Constraints | Reflected as constraints during task decomposition |
-| Success Criteria | Used as Self-Review criteria |
-| Open Questions | Reflected as assumptions in the plan, then confirmed with the user |
-
-## Plan Document Structure
-
-Save to: `docs/plans/YYYY-MM-DD-<feature-name>.md` (follow user preference if specified).
-
-See [plan-template.md](examples/plan-template.md) for the complete template.
-
-The plan document contains:
-
-1. **Header** — Goal, Architecture, Tech Stack, Work Scope, Verification Strategy
-2. **File Structure Mapping** — Which files will be created or modified
-3. **Tasks** — Ordered, dependency-aware, with Worker-Validator structure
-4. **Final Verification Task** — Always last, depends on all other tasks
-
-### Verification Discovery
-
-Before defining tasks, discover the project's highest-level verification capability. See [verification-discovery.md](references/verification-discovery.md) for the full discovery process.
-
-Record the result in the plan header:
-
-```markdown
-**Verification Strategy:**
-- **Level:** [e2e | integration | skill/agent | test-suite | build-only]
-- **Command:** [exact command to run]
-- **What it validates:** [what passing proves]
-```
-
-### File Structure Mapping
-
-Before defining tasks, map out which files will be created or modified:
-
-- Each file should have one clear responsibility
-- Files that change together should live together. Split by responsibility, not by layer
-- Follow existing codebase patterns
-- File structure informs task decomposition — each task should produce a self-contained change
-
-## Task Decomposition
-
-### 1. Parallelism and Dependencies
-
-Tasks should be designed for maximum parallel execution. However, these cases require waiting:
-
-- Tasks modifying the same file (prevents file conflicts)
-- Tasks where one task's output is referenced by another (interface dependency)
-- Tasks that modify shared state (database schema, config files, etc.)
-
-Dependencies are stated in the task header:
-
-```markdown
-### Task N: [Task Name]
-
-**Dependencies:** Runs after Task K completes
-**Files:**
-- Create: `path/to/file`
-- Modify: `path/to/existing-file:line-range`
-- Test: `path/to/test-file`
-```
-
-### 2. Worker-Validator Structure
-
-Each task is designed for independent execution and verification:
-
-- **Worker** (`plan-worker` agent): Executes the task's steps exactly as written. Makes no judgments beyond what the plan specifies.
-- **Validator** (`plan-validator` agent): Reviews the worker's output after completion. Checks test pass/fail, code quality, and spec compliance. Operates under an information barrier — never sees the worker's process, only the result in the codebase.
-
-This structure enables spawning multiple tasks simultaneously via parallel `Agent` tool calls.
-
-### 3. Task Granularity
-
-Each step is one action (2-5 minutes):
-
-- "Write the failing test" — one step
-- "Run it to make sure it fails" — one step
-- "Write the minimal code to make the test pass" — one step
-- "Run the tests and make sure they pass" — one step
-- "Commit" — one step
-
-See [task-format.md](examples/task-format.md) for concrete format examples.
-
-### Final Verification Task
-
-Every plan must end with a **Final Verification Task** that runs the discovered highest-level verification. Always the last task, depends on all other tasks, cannot be parallelized.
-
-## No Placeholders
-
-Every step must contain the actual content a worker needs. These are **plan failures** — never write them:
-
-- "TBD", "TODO", "implement later", "fill in details"
-- "Add appropriate error handling" / "add validation" / "handle edge cases"
-- "Write tests for the above" (without actual test code)
-- "Similar to Task N" (repeat the code — workers may read tasks out of order)
-- Steps that describe what to do without showing how (code blocks required for code steps)
-- References to types, functions, or methods not defined in any task
-
-## Independent Review (5 Parallel Reviewers)
-
-**This step is Hard Gate 6 — once a plan is written, it cannot be skipped regardless of size.**
-
-After writing the complete plan, run the plan-review Workflow. It dispatches 5 independent reviewer agents in parallel — one per dimension — and synthesizes FAIL findings into a correction directive.
-
-**실행:**
+## 발동
 
 ```javascript
-Workflow({ name: "nxtdev:plan-review", args: "[plan path]" })
+Workflow({ name: "nxtdev:plan", args: briefPath })
 ```
 
-**결과 해석:**
+## 결과 해석
 
-- `overallVerdict: "PASS"` → 계획 즉시 실행 가능.
-- `overallVerdict: "FAIL"` → `synthesis`에 리뷰어별 수정 지시문 있음. 수정 후 `failedReviewers` 목록의 리뷰어만 재실행:
+- `finalVerdict: "PASS"` → "plan.md 완성. `/nxtdev:run-plan` 실행할까요?"
+- **3라운드 다 돌고도 FAIL** → plan.md + `remaining`(남은 FAIL 리뷰어) 보여주고
+  사용자 판단 요청. (무한 루프 방지)
 
-```javascript
-// FAIL 리뷰어만 재실행 예시
-Agent({ description: "Re-review spec", prompt: "[plan path]", subagent_type: "nxtdev:plan-review-spec" })
-```
+## 독립 검토는 생략되지 않는다 (사용자 안내용)
 
-**Do NOT skip the review.** Inline review by the plan author suffers from confirmation bias. Independent reviewers in isolated contexts catch what the author cannot.
+[B] plan은 작성 직후 5개 독립 리뷰어의 검토를 **반드시** 받는다 — plan.js가 코드로
+강제한다. 작성자 본인은 자기 plan의 허점을 못 본다(confirmation bias). "작아서"/
+"명확해서"/"토큰 절약"은 검토를 건너뛸 사유가 아니다. 상세: `references/independent-review.md`.
 
-See [independent-review.md](references/independent-review.md) for what each reviewer checks in detail.
+## Workflow 도구 불가 시 폴백
 
-## Remember
-
-- Exact file paths always
-- Complete code in every step — if a step changes code, show the code
-- Exact commands with expected output
-- DRY, YAGNI, TDD, frequent commits
-
-## Execution Handoff
-
-After saving the plan:
-
-**"Plan complete and saved to `docs/plans/<filename>.md`. `/nxtdev:run-plan`으로 실행하시겠습니까?"**
-
-## Anti-Patterns
-
-| Anti-Pattern | Why It Fails |
-|---|---|
-| Marking tasks that modify the same file as parallel | File conflicts, unmergeable changes |
-| Listing tasks without dependencies | Execution order tangles, interface mismatches |
-| Steps that assume "the worker will figure it out" | Worker's arbitrary interpretation → spec drift |
-| Approving a plan with placeholders | Blocked at execution stage, must return to planning |
-| Completing a plan without Self-Review | Missing spec coverage, type mismatches, dependency errors go undetected |
-
-## Minimal Checklist
-
-Self-check when plan writing is complete:
-
-- [ ] Do all tasks have exact file paths?
-- [ ] Do all steps contain executable code/commands?
-- [ ] Are there no file conflicts between parallel tasks?
-- [ ] Are dependency chains accurately stated?
-- [ ] Does the plan cover all spec requirements?
-- [ ] Are there no placeholders?
-- [ ] Is there a Verification Strategy in the plan header?
-- [ ] Is the Final Verification Task the last task in the plan?
-
-## Transition
-
-After plan approval:
-
-- Ready to execute → `/nxtdev:run-plan`
-- Ambiguity discovered → return to `/nxtdev:clarify`
-
-This skill **does not invoke the next skill.** It ends by presenting the plan and letting the user choose.
+[B] Workflow 도구를 못 쓰는 환경에서는: plan-author 에이전트로 작성 → 5개
+`nxtdev:plan-review-*` 에이전트를 병렬 `Agent`로 직접 호출 → FAIL 항목 수동 수정 →
+재검토를, **PASS까지** 안내한다. 이 경로에서도 검토는 생략되지 않는다.
