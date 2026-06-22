@@ -1,67 +1,59 @@
 ---
 name: plan
-description: "Context Brief를 점검하고 plan 워크플로우(작성→검토→수정 루프)를 발동하는 문지기. plan을 직접 쓰지 않는다."
+description: "Gates a Context Brief and launches the plan workflow (write → review → revise loop). Does not write the plan itself."
 argument-hint: "[context-brief-path]"
 ---
 
-<!-- ===================================================================
-SKELETON v3 — 문지기. 작성 규칙은 plan-author.md, 검토 강제는 plan.js가 정본.
-이 파일은 (1)게이트 점검 (2)워크플로우 발동 (3)결과 안내만 한다.
-==================================================================== -->
+# Plan (Gatekeeper)
 
-# Plan (문지기)
-
-이 스킬은 plan을 직접 작성하지 않는다. Context Brief를 점검하고 plan 워크플로우
-(헤드리스 자동 루프: 작성→검토→수정)를 발동한 뒤, 결과를 사용자에게 안내한다.
+This skill does not write the plan itself. It checks the Context Brief, launches the plan
+workflow (headless auto-loop: write → review → revise), then reports the result to the user.
 
 ## When To Use
 
-- `/nxtdev:clarify`가 끝나 Context Brief 파일이 생성된 뒤
-- 사용자가 명확한 요청으로 plan 작성을 직접 요청할 때
-- 다단계 구현 + 의존성 있는 태스크 순서 정의가 필요할 때
+- After `/nxtdev:clarify` finishes and a Context Brief file is generated
+- When the user explicitly requests plan creation with a clear prompt
+- When multi-step implementation needs ordered, dependency-aware tasks
 
 ## When NOT To Use
 
-- 작업 스코프가 아직 모호할 때 (→ `/nxtdev:clarify`로)
-- 단일 파일 편집, 단순 버그 수정 등 한 단계 작업
-- 사용자가 "plan 생략하고 바로 해"라고 할 때
+- When work scope is still ambiguous (→ `/nxtdev:clarify`)
+- Single-file edits, simple bug fixes, other single-step tasks
+- When the user says "skip the plan, just do it"
 
-## 게이트 (사용자 개입은 여기까지)
+## Gate (user involvement ends here)
 
-[G] **데이터 인계의 시작점.** 게이트가 확정한 내용은 반드시 Context Brief **파일에**
-기록되어야 한다 — 워크플로우는 파일 경로만 받고, 헤드리스 작성자는 그 파일만 읽는다.
+**Start of the data handoff.** What the gate confirms MUST be recorded into the Context
+Brief **file** — the workflow receives only the file path, and the headless author reads only that file.
 
-1. **Context Brief 읽기** (`$ARGUMENTS`).
-2. **점검**: goal / scope(in·out) / success criteria 중 누락이 있는가?
-   - 가벼운 누락(필드·간단한 확인) → `AskUserQuestion`으로 보강
-     → **★ 보강한 답을 Context Brief 파일에 `Write`로 반영** ([G] 인계 필수)
-   - 코드 조사가 필요한 근본 모호 → `/nxtdev:clarify` 권유(강제 회부 안 함)
-3. **절대 사용자 확인 없이 스코프를 자체 결정하지 않는다.**
-4. 완전한 Context Brief 도달 → 발동.
+1. **Read the Context Brief** (`$ARGUMENTS`).
+2. **Check**: is goal / scope (in·out) / success criteria missing any?
+   - Light gaps (fields, simple confirmation) → supplement via `AskUserQuestion`
+     → **★ write the supplemented answers back into the Context Brief file with `Write`** (handoff required)
+   - Fundamental ambiguity needing code investigation → recommend `/nxtdev:clarify` (no forced referral)
+3. **Never decide scope yourself without user confirmation.**
+4. Complete Context Brief reached → launch.
 
-<!-- 점검 기준은 게이트 1(Context Brief 완전성)뿐이다. 작성 규칙(옛 Hard Gate 2~5)은
-     plan-author가, 검토 강제(옛 Hard Gate 6)는 plan.js가 책임진다. 여기서 중복 점검하지 않는다. -->
-
-## 발동
+## Launch
 
 ```javascript
-Workflow({ name: "nxtdev:plan", args: briefPath })
+Workflow({ name: "nxtdev:plan", args: briefPath });
 ```
 
-## 결과 해석
+## Result Interpretation
 
-- `finalVerdict: "PASS"` → "plan.md 완성. `/nxtdev:run-plan` 실행할까요?"
-- **3라운드 다 돌고도 FAIL** → plan.md + `remaining`(남은 FAIL 리뷰어) 보여주고
-  사용자 판단 요청. (무한 루프 방지)
+- `finalVerdict: "PASS"` → "plan.md complete. Run `/nxtdev:run-plan`?"
+- **FAIL after all 3 rounds** → show plan.md + `remaining` (failed reviewers) and ask the
+  user to decide. (infinite-loop guard)
 
-## 독립 검토는 생략되지 않는다 (사용자 안내용)
+## Independent review is never skipped (user-facing note)
 
-[B] plan은 작성 직후 5개 독립 리뷰어의 검토를 **반드시** 받는다 — plan.js가 코드로
-강제한다. 작성자 본인은 자기 plan의 허점을 못 본다(confirmation bias). "작아서"/
-"명확해서"/"토큰 절약"은 검토를 건너뛸 사유가 아니다. 상세: `references/independent-review.md`.
+The plan is reviewed by 5 independent reviewers immediately after writing — plan.js enforces
+this in code. The author cannot see the holes in their own plan (confirmation bias).
+"It's small" / "it's clear" / "to save tokens" are not reasons to skip. Details: `references/independent-review.md`.
 
-## Workflow 도구 불가 시 폴백
+## Fallback when the Workflow tool is unavailable
 
-[B] Workflow 도구를 못 쓰는 환경에서는: plan-author 에이전트로 작성 → 5개
-`nxtdev:plan-review-*` 에이전트를 병렬 `Agent`로 직접 호출 → FAIL 항목 수동 수정 →
-재검토를, **PASS까지** 안내한다. 이 경로에서도 검토는 생략되지 않는다.
+When the Workflow tool cannot be used: write with the plan-author agent → call the 5
+`nxtdev:plan-review-*` agents directly in parallel via `Agent` → manually fix FAIL items →
+re-review, **until PASS**. Review is not skipped on this path either.
